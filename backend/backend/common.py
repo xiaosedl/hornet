@@ -8,6 +8,7 @@ class Error:
     USER_OR_PAWD_ERROR = {"10011": "用户名或密码错误"}
     PAWD_ERROR = {"10012": "两次密码不一致"}
     USER_EXIST = {"10013": "用户已存在"}
+    USER_NOT_EXIST = {"10014": "用户不存在"}
 
 
 def response(success: bool = True, error: dict = None, result=[]) -> dict:
