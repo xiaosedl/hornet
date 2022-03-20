@@ -9,6 +9,7 @@ class Error:
     PAWD_ERROR = {"10012": "两次密码不一致"}
     USER_EXIST = {"10013": "用户已存在"}
     USER_NOT_EXIST = {"10014": "用户不存在"}
+    PROJECTS_IS_NULL = {"20010": "项目查询结果为空"}
 
 
 def response(success: bool = True, error: dict = None, result=[]) -> dict:

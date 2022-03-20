@@ -8,11 +8,11 @@
 from ninja import NinjaAPI
 
 from users.api import router as users_router
+from projects.api import router as project_router
 
 
 apis = NinjaAPI()
 
 
 apis.add_router('/users', users_router, tags=["Users"])
-
-
+apis.add_router('/projects', project_router, tags=['project'])
