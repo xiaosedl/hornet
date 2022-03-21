@@ -1,27 +1,15 @@
-from ninja import Router
-from ninja import Schema
-from django.contrib.auth.models import User
 from django.contrib import auth
+from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from ninja import Router
 
 from backend.common import response, Error
-
+from users.api_schema import RegisterIn, LoginIn
 
 router = Router()
 
 
-class RegisterIn(Schema):
-    username: str
-    password: str
-    confirm_password: str
-
-
-class RegisterOut(Schema):
-    id: int
-    username: str
-    email: str
-
-
-@router.post('/register')
+@router.post('/register', auth=None)
 def user_register(request, payload: RegisterIn):
     """
     用户注册
@@ -51,12 +39,7 @@ def user_register(request, payload: RegisterIn):
     return response(result=user_info)
 
 
-class LoginIn(Schema):
-    username: str
-    password: str
-
-
-@router.post('/login')
+@router.post('/login', auth=None)
 def user_login(request, payload: LoginIn):
     """
     用户登录
@@ -67,11 +50,13 @@ def user_login(request, payload: LoginIn):
     username = payload.username
     password = payload.password
     user = auth.authenticate(username=username, password=password)  # 使用 django 自带的认证模块
-
     if user is not None:
+        auth.login(request, user)  # 向 django-session 表新增一条数据
+        token = Session.objects.last()
         user_info = {
             "id": user.id,
-            "username": user.username
+            "username": user.username,
+            "token": token.session_key
         }
         return response(result=user_info)
     else:

@@ -82,7 +82,7 @@ DATABASES = {
     }
 }
 
-
+SESSION_COOKIE_AGE = 3600  # session 过期时间，默认秒
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
