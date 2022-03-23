@@ -1,31 +1,38 @@
 from ninja import Router, File
 from ninja.files import UploadedFile
+from ninja.pagination import paginate
 
 from backend.common import response, Error
-from projects.api_schema import ProjectIn
+from backend.pagination import CustomPagination
+from projects.api_schema import CreateProjectIn
 from projects.models import Project
 
 router = Router()
 
 
-@router.post('/projects')
-def get_project(request, payload: ProjectIn):
+@router.get('/list', auth=None)
+@paginate(CustomPagination, page_size=6)  # type: ignore
+def project_list(request, **kwargs):
     """
-    查询 projects
+    获取项目列表
+    auth=None 该接口不需要认证
     """
+    data = [
+        {
+            "id": p.id,
+            "name": p.name,
+            "describe": p.describe,
+            "image": p.image,
+            "create_time": p.create_time
+        }
+        for p in Project.objects.filter(is_delete=False).all()
+    ]
 
-    projects = "abc"  # 查询项目
-
-    if projects:
-        projects_info = []
-
-        return response(result=projects_info)
-    else:
-        return response(error=Error.PROJECTS_IS_NULL)
+    return data
 
 
-@router.post('/create/', auth=None)
-def create_project(request, payload: ProjectIn):
+@router.post('/create', auth=None)
+def project_create(request, payload: CreateProjectIn):
     """
     创建项目
     """
@@ -42,7 +49,7 @@ def create_project(request, payload: ProjectIn):
     return response()
 
 
-@router.post('/upload/', auth=None)
+@router.post('/upload', auth=None)
 def img_upload(request, file: UploadedFile = File(...)):
     """
     图片上传，接收 buye

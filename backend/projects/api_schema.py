@@ -1,7 +1,8 @@
 from ninja import Schema
+from typing import Any
 
 
-class ProjectIn(Schema):
+class CreateProjectIn(Schema):
     """创建项目入参"""
     name: str
     describe: str = None
@@ -9,7 +10,9 @@ class ProjectIn(Schema):
 
 
 class ProjectOut(Schema):
-    project_name: str
-    project_desc: str
-    project_status: str
-    project_create_time: str
+    """查询项目出参"""
+    id: int
+    name: str
+    describe: str
+    image: str
+    create_time: Any
