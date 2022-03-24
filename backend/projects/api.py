@@ -1,16 +1,18 @@
+from typing import List
+
 from ninja import Router, File
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
 from backend.common import response, Error
 from backend.pagination import CustomPagination
-from projects.api_schema import CreateProjectIn
+from projects.api_schema import CreateProjectIn, ProjectOut
 from projects.models import Project
 
 router = Router()
 
 
-@router.get('/list', auth=None)
+@router.get('/list', auth=None, response=List[ProjectOut])
 @paginate(CustomPagination, page_size=6)  # type: ignore
 def project_list(request, **kwargs):
     """
@@ -25,10 +27,10 @@ def project_list(request, **kwargs):
             "image": p.image,
             "create_time": p.create_time
         }
-        for p in Project.objects.filter(is_delete=False).all()
+        for p in Project.objects.filter(is_delete=True).all()
     ]
 
-    return data
+    return Project.objects.filter(is_delete=False).all()
 
 
 @router.post('/create', auth=None)
