@@ -9,7 +9,7 @@ from backend.pagination import CustomPagination
 from projects.api_schema import CreateProjectIn, ProjectOut
 from projects.models import Project
 
-router = Router()
+router = Router()  # 实例华 project 的路由 Router
 
 
 @router.get('/list', auth=None, response=List[ProjectOut])
@@ -19,18 +19,8 @@ def project_list(request, **kwargs):
     获取项目列表
     auth=None 该接口不需要认证
     """
-    data = [
-        {
-            "id": p.id,
-            "name": p.name,
-            "describe": p.describe,
-            "image": p.image,
-            "create_time": p.create_time
-        }
-        for p in Project.objects.filter(is_delete=True).all()
-    ]
 
-    return Project.objects.filter(is_delete=False).all()
+    return Project.objects.filter(is_delete=False).all()  # 查询 project 数据
 
 
 @router.post('/create', auth=None)
