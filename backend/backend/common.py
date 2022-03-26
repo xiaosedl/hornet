@@ -12,6 +12,10 @@ class Error:
 
     PROJECTS_IS_NULL = {"20010": "项目查询结果为空"}
     PROJECT_ANME_EXIST = {"20011": "项目名称已存在"}
+    PROJECT_NOT_EXIST = {"20012": "项目不存在存在"}
+    PROJECT_IS_DEELEE = {"20013": "项目已经被删除"}
+
+    IMAGE_TOO_BIG = {"30010": "不支持大于 100b 的文件上传"}
 
 
 def response(success: bool = True, error: dict = None, result=[]) -> dict:
