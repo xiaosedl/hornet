@@ -15,10 +15,11 @@ class Error:
     PROJECT_NOT_EXIST = {"20012": "项目不存在存在"}
     PROJECT_IS_DEELEE = {"20013": "项目已经被删除"}
 
-    IMAGE_TOO_BIG = {"30010": "不支持大于 100b 的文件上传"}
+    IMAGE_SIZE_ERROR = {"30010": "不支持大于 20M 的图片上传"}
+    IMAGE_TYPE_ERROR = {"30011": "图片类型错误"}
 
 
-def response(success: bool = True, error: dict = None, result=[]) -> dict:
+def response(success: bool = True, error: dict = None, item=None) -> dict:
     """
     定义统一返回格式
     """
@@ -31,13 +32,16 @@ def response(success: bool = True, error: dict = None, result=[]) -> dict:
         error_code = list(error.keys())[0]
         error_msg = list(error.values())[0]
 
+    if item is None:
+        item = []
+
     resp_dict = {
         "success": success,
         "error": {
             "code": error_code,
             "msg": error_msg
         },
-        "result": result
+        "item": item
     }
 
     return resp_dict

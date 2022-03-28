@@ -1,3 +1,4 @@
+import hashlib
 from typing import List
 import os
 from os.path import dirname
@@ -9,6 +10,7 @@ from ninja.pagination import paginate
 
 from backend.common import response, Error
 from backend.pagination import CustomPagination
+from backend.settings import IMAGE_DIR
 from projects.api_schema import CreateProjectIn, ProjectOut
 from projects.models import Project
 
@@ -58,7 +60,7 @@ def project_detail(request, project_id):
         "image": project.image,
         "create_time": project.create_time
     }
-    return response(result=data)
+    return response(item=data)
 
 
 @router.put('/update/{project_id}/', auth=None)
@@ -95,24 +97,23 @@ def project_img_upload(request, file: UploadedFile = File(...)):
     3. 上传的文件需要保存：读取上传文件内容，写入到一个新文件中
     """
 
-    print(file.name)
+    # 获取上传文件后缀
     suffix = file.name.split(".")[-1]
-    if suffix not in ["png", "jpg", "jpeg"]:
-        print("不支持该文件类型的上传")
+    if suffix not in ["png", "jpg", "jpeg", "gif"]:
+        return response(error=Error.IMAGE_TYPE_ERROR)
 
-    print(f"size: {file.size}")
-    if file.size > 100:
-        print("不支持大于 100b 的文件上传")
-        return response(error=Error.IMAGE_TOO_BIG)
+    # 图片大小 1024 * 1024 * 20 M
+    if file.size > 20971520:
+        return response(error=Error.IMAGE_SIZE_ERROR)
 
-    file_dir = dirname(dirname(os.path.abspath(__file__)))
-    upload_file = os.path.join(file_dir, "resources/image/", file.name)
-    print(upload_file)
+    # 文件名生成 md5
+    file_md5 = hashlib.md5(bytes(file.name, encoding="utf8")).hexdigest()
+    file_name = file_md5 + "." + suffix
 
-    data = file.read()
-
-    with open(upload_file, 'wb+') as local_file:
+    # 保存图片
+    upload_file = os.path.join(IMAGE_DIR, file_name )
+    with open(upload_file, 'wb+') as f:
         for chunk in file.chunks():
-            local_file.write(chunk)
+            f.write(chunk)
 
-    return {"name": file.name, "len": len(data)}
+    return response(item=file_name)

@@ -36,7 +36,7 @@ def user_register(request, payload: RegisterIn):
         "id": user.id,
         "username": user.username
     }
-    return response(result=user_info)
+    return response(item=user_info)
 
 
 @router.post('/login', auth=None)
@@ -58,6 +58,6 @@ def user_login(request, payload: LoginIn):
             "username": user.username,
             "token": token.session_key
         }
-        return response(result=user_info)
+        return response(item=user_info)
     else:
         return response(error=Error.USER_NOT_EXIST)
