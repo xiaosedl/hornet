@@ -1,7 +1,6 @@
 import hashlib
-from typing import List
 import os
-from os.path import dirname
+from typing import List
 
 from django.shortcuts import get_object_or_404
 from ninja import Router, File
@@ -14,7 +13,7 @@ from backend.settings import IMAGE_DIR
 from projects.api_schema import CreateProjectIn, ProjectOut
 from projects.models import Project
 
-router = Router()  # 实例华 project 的路由 Router
+router = Router()  # 实例化 project 的路由 Router
 
 
 @router.get('/list/', auth=None, response=List[ProjectOut])
@@ -36,7 +35,7 @@ def project_create(request, payload: CreateProjectIn):
 
     project = Project.objects.filter(name=payload.name)
     if len(project) > 0:
-        return response(error=Error.PROJECT_ANME_EXIST)
+        return response(error=Error.PROJECT_NAME_EXIST)
 
     Project.objects.create(**payload.dict())
     return response()
