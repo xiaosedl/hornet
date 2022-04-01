@@ -50,3 +50,26 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
     }
 
     return resp_dict
+
+
+def node_tree(nodes, current_node):
+    """
+    递归：获取 curent_node 的所有子节点
+    """
+
+    for node in nodes:
+        if node["parent_id"] == current_node["id"]:
+            current_node["children"].append(node)
+            node_tree(nodes, node)  # 递归继续获取子节点，直到 nodes 遍历结束
+    return current_node
+
+
+def children_node(nodes, cureent_node):
+    """
+    判断当前有没有子节点
+    """
+
+    for node in nodes:
+        if node["parent_id"] == cureent_node["id"]:
+            return True
+    return False

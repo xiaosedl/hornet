@@ -1,15 +1,16 @@
 from django.forms import model_to_dict
-from ninja import Router
+from django.shortcuts import get_object_or_404
+from ninja import Router, Query
 
-from cases.api_schema import ModuleIn
-from backend.common import Error, response
+from backend.common import Error, response, children_node, node_tree
+from cases.api_schema import ModuleIn, ProjectIn
 from cases.models import Module
 from projects.models import Project
 
 router = Router()
 
 
-@router.post('/', auth=None)
+@router.post('/module/', auth=None)
 def create_module(request, payload: ModuleIn):
     """
     创建模块
@@ -27,3 +28,46 @@ def create_module(request, payload: ModuleIn):
 
     module = Module.objects.create(**payload.dict())
     return response(item=model_to_dict(module))
+
+
+@router.get("/module/tree", auth=None)
+def get_module_tree(request, filters: ProjectIn = Query(...)):
+    """
+    获取项目树
+    auth=None 该接口不需要认证
+    """
+
+    modules = Module.objects.filter(project_id=filters.project_id, is_delete=False)
+    data_node = []
+    for m in modules:
+        data_node.append({
+            "id": m.id,
+            "parent_id": m.parent_id,
+            "label": m.name,
+            "children": []
+        })
+
+    data = []
+    for n in data_node:
+        is_child = children_node(data_node, n)  # --> True/False
+
+        # 如果没有子节点且父级节点为 0，添加为最外层，否则递归递进节点层级
+        if not is_child and n["parent_id"] == 0:
+            data.append(n)
+        elif is_child and n["parent_id"] == 0:
+            ret = node_tree(data_node, n)
+            data.append(ret)
+
+    return response(item=data)
+
+
+@router.delete('/module/delete/{module_id}', auth=None)
+def module_delete(request, module_id: int):
+    """
+    删除模块信息
+    """
+
+    module = get_object_or_404(Module, id=module_id)
+    module.is_delete = True
+    module.save()
+    return response()

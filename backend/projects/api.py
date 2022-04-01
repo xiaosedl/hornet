@@ -76,7 +76,7 @@ def project_update(request, project_id: int, payload: CreateProjectIn):
 
 
 @router.delete('/delete/{project_id}/', auth=None)
-def project_update(request, project_id: int):
+def project_delete(request, project_id: int):
     """
     删除项目信息
     """

@@ -7,3 +7,9 @@ class ModuleIn(Schema):
     name: str
     project_id: int
     parent_id: int = 0
+
+
+class ProjectIn(Schema):
+    """模块所属项目入参"""
+
+    project_id: int
