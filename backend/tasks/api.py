@@ -49,6 +49,7 @@ def running_task(request, task_id: int):
     """
 
     task = get_object_or_404(TestTask, pk=task_id)
+    print("1. 读取任务的测试用例")
     relevance = TaskCaseRelevance.objects.filter(task_id=task.id)
 
     test_cases = {}
@@ -70,10 +71,14 @@ def running_task(request, task_id: int):
         except TestCase.DoesNotExist:
             pass
 
+    print("2. 将测试用例数据写到 test_data.json")
     with open(TEST_DATA, 'w') as fj:
         fj.write(json.dumps(test_cases))
+
+    print("3. 命令行执行 test_case.py 文件运行用例")
     os.system(f"python3 {TEST_CASE}")
 
+    print("4. 保存测试执行结果")
     save_test_result(task_id)
 
     return response()
