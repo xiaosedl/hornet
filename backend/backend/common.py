@@ -1,3 +1,5 @@
+from itertools import chain
+
 
 class Error:
     """
@@ -31,6 +33,18 @@ class Error:
     ASSERT_TYPE_ERROR = {"10055": "断言类型错误"}
 
 
+def model_to_dict(instance: object) -> dict:
+    """
+    对象转字典
+    """
+
+    opts = instance._meta  # type: ignore
+    data = {}
+    for f in chain(opts.concrete_fields, opts.private_fields, opts.many_to_many):
+        data[f.name] = f.value_from_object(instance)
+    return data
+
+
 def response(success: bool = True, error: dict = None, item=None) -> dict:
     """
     定义统一返回格式
@@ -46,6 +60,10 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
 
     if item is None:
         item = []
+    elif isinstance(item, dict):
+        item = item
+    elif isinstance(item, object):
+        item = model_to_dict(item)
 
     resp_dict = {
         "success": success,

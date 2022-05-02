@@ -19,7 +19,7 @@ class ProjectIn(Schema):
 
 
 class Method(str, Enum):
-    """GET/POST/DELETE/PUT"""
+    """请求方式：GET/POST/DELETE/PUT"""
     GET = "GET"
     POST = "POST"
     DELETE = "DELETE"
@@ -27,7 +27,7 @@ class Method(str, Enum):
 
 
 class ParamsType(str, Enum):
-    """param/form-data/json"""
+    """请求内容类型：param/form-data/json"""
 
     params = "Params"
     form_data = "Form"
@@ -74,12 +74,20 @@ class CaseAssertIn(Schema):
     assert_text: str
 
 
+class ModuleSchema(Schema):
+    """用例所属模块参数"""
+
+    id: int
+    name: str
+
+
 class CaseOut(Schema):
     """用例出参"""
 
     module_id: int
     url: str
     name: str
-    method: Method
+    method: str
+    module: ModuleSchema = None
     create_time: Any
     update_time: Any

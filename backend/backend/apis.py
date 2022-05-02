@@ -13,6 +13,7 @@ from users.api import router as users_router
 from projects.api import router as projects_router
 from cases.apis.module_api import router as modules_router
 from cases.apis.case_api import router as cases_router
+from tasks.api import router as tasks_router
 
 
 class InvalidToken(Exception):
@@ -67,6 +68,8 @@ apis.add_router('/users/', users_router, tags=["Users"])
 # tags projects URI: api/projects/xxx
 apis.add_router('/projects/', projects_router, tags=['Projects'])
 # tags module URI: api/modules/xxx
-apis.add_router('/modules/', modules_router, tags=['Module'])
+apis.add_router('/modules/', modules_router, tags=['Modules'])
 # tags cases URI: api/cases/xxx
 apis.add_router('/cases/', cases_router, tags=['Cases'])
+# tags tasks URI: api/tasks/xxx
+apis.add_router('/tasks/', tasks_router, tags=['Tasks'])

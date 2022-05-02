@@ -25,7 +25,7 @@ class TestCase(models.Model):
     """
 
     module = models.ForeignKey(Module, on_delete=models.CASCADE)  # 关联 module id
-    name = models.CharField("名称", max_length=50, null=False)
+    name = models.CharField("名称", max_length=50, null=False, unique=True)
     url = models.TextField("URL", null=False)
     method = models.CharField("请求方法", max_length=10, null=False)  # GET/POST/DELETE/PUT
     header = models.TextField("请求头", null=False, default="{}")

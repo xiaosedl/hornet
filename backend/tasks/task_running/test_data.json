@@ -1,0 +1,1 @@
+{"test case1": {"url": "http://httpbin.org/post", "method": "POST", "header": {}, "params_type": "json", "params_body": {"hello": "world"}, "assert_type": "include", "assert_body": "world"}, "test case2": {"url": "http://httpbin.org/get", "method": "GET", "header": {}, "params_type": "Params", "params_body": {"hello": "world"}, "assert_type": "include", "assert_body": "world"}}

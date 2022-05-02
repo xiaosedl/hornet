@@ -1,10 +1,14 @@
+from typing import List
+
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
 from ninja import Router, Query
+from ninja.pagination import paginate
 
 from backend.common import Error, response, children_node, node_tree
-from cases.apis.api_schema import ModuleIn, ProjectIn
-from cases.models import Module
+from backend.pagination import CustomPagination
+from cases.apis.api_schema import ModuleIn, ProjectIn, CaseOut
+from cases.models import Module, TestCase
 from projects.models import Project
 
 router = Router()
@@ -73,3 +77,14 @@ def module_delete(request, module_id: int):
     module.is_delete = True
     module.save()
     return response()
+
+
+@router.get('/{module_id}/cases/', auth=None, response=List[CaseOut])
+@paginate(CustomPagination, page_size=6)  # type: ignore
+def list_case(request, module_id: int,  **kwargs):
+    """
+    查询用例列表
+    auth=None，该接口不需要认证
+    """
+
+    return TestCase.objects.filter(module_id = module_id, is_delete=False).all()

@@ -1,16 +1,10 @@
-from typing import List
-
+import requests
 from django.forms import model_to_dict
 from django.shortcuts import get_object_or_404
-from ninja import Router, Query
-from ninja.pagination import paginate
+from ninja import Router
 
-import requests
-
-from backend.common import Error, response, children_node, node_tree
-from backend.pagination import CustomPagination
-
-from cases.apis.api_schema import CaseIn, CaseDebugIn, CaseAssertIn, CaseOut
+from backend.common import Error, response
+from cases.apis.api_schema import CaseIn, CaseDebugIn, CaseAssertIn
 from cases.models import Module, TestCase
 
 router = Router()
@@ -26,7 +20,9 @@ def create_case(request, data: CaseIn):
     case = Module.objects.filter(id=data.module_id)
     if len(case) == 0:
         return response(error=Error.MODULE_NOT_EXIST)
-
+    case_exist = TestCase.objects.filter(name=data.name)
+    if case_exist:
+        return response(error=Error.CASE_NAME_EXIST)
     case = TestCase.objects.create(**data.dict())
     return response(item=model_to_dict(case))
 
@@ -39,13 +35,13 @@ def debug_case(request, data: CaseDebugIn):
     """
 
     method = data.method.value
-    param_type = data.params_type.value
+    params_type = data.params_type.value
 
-    if method == "GET" and param_type == "Params":
+    if method == "GET" and params_type.title() == "Params":
         resp = requests.request(method=method, url=data.url, headers=data.header, params=data.params_body).text
-    elif method in ["POST", "PUT", "DELETE"] and param_type == "Form":
+    elif method in ["POST", "PUT", "DELETE"] and params_type.title() == "Form":
         resp = requests.request(method=method, url=data.url, headers=data.header, data=data.params_body).text
-    elif method in {"POST", "PUT", "DELETE"} and param_type == "Json":
+    elif method in {"POST", "PUT", "DELETE"} and params_type.title() == "Json":
         resp = requests.request(method=method, url=data.url, headers=data.header, json=data.params_body).text
     else:
         return response(error=Error.CASE_REQEUST_ERROR)
@@ -101,17 +97,6 @@ def delete_case(request, case_id):
     case.is_delete = True
     case.save()
     return response()
-
-
-@router.get('/list/', auth=None, response=List[CaseOut])
-@paginate(CustomPagination, page_size=6)  # type: ignore
-def list_case(request, **kwargs):
-    """
-    查询用例列表
-    auth=None，该接口不需要认证
-    """
-
-    return TestCase.objects.filter(is_delete=False).all()
 
 
 @router.get('/{case_id}/', auth=None)
