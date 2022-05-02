@@ -9,10 +9,10 @@ from django.contrib.sessions.models import Session
 from ninja import NinjaAPI
 from ninja.security import HttpBearer
 
-from backend.settings import SESSION_COOKIE_AGE
 from users.api import router as users_router
 from projects.api import router as projects_router
-from cases.api import router as cases_router
+from cases.apis.module_api import router as modules_router
+from cases.apis.case_api import router as cases_router
 
 
 class InvalidToken(Exception):
@@ -66,5 +66,7 @@ def on_expire_token(request, exc):
 apis.add_router('/users/', users_router, tags=["Users"])
 # tags projects URI: api/projects/xxx
 apis.add_router('/projects/', projects_router, tags=['Projects'])
+# tags module URI: api/modules/xxx
+apis.add_router('/modules/', modules_router, tags=['Module'])
 # tags cases URI: api/cases/xxx
 apis.add_router('/cases/', cases_router, tags=['Cases'])

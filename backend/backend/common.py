@@ -20,8 +20,15 @@ class Error:
 
     MODULE_IS_NULL = {"10040": "模块查询结果为空"}
     MODULE_NAME_EXIST = {"10041": "模块名称已存在"}
-    MODULE_NOT_EXIST = {"10042": "模块不存在存在"}
+    MODULE_NOT_EXIST = {"10042": "模块存在"}
     MODULE_IS_DEELEE = {"10043": "模块已经被删除"}
+
+    CASE_IS_NULL = {"10050": "测试用例查询结果为空"}
+    CASE_NAME_EXIST = {"10051": "测试用例名称已存在"}
+    CASE_NOT_EXIST = {"10052": "测试用例存在"}
+    CASE_IS_DEELEE = {"10053": "测试用例已经被删除"}
+    CASE_REQEUST_ERROR = {"10054": "请求方法和类型不符：[GET]-[Param]，[POST/PUT]-[Form/Json]"}
+    ASSERT_TYPE_ERROR = {"10055": "断言类型错误"}
 
 
 def response(success: bool = True, error: dict = None, item=None) -> dict:

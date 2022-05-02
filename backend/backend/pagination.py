@@ -8,6 +8,7 @@ class CustomPagination(PaginationBase):
     """
     自定义分页器
     """
+
     class Input(Schema):
         """分页器的入参"""
         page: int = Field(1, gt=0)

@@ -3,14 +3,14 @@ from django.shortcuts import get_object_or_404
 from ninja import Router, Query
 
 from backend.common import Error, response, children_node, node_tree
-from cases.api_schema import ModuleIn, ProjectIn
+from cases.apis.api_schema import ModuleIn, ProjectIn
 from cases.models import Module
 from projects.models import Project
 
 router = Router()
 
 
-@router.post('/module/', auth=None)
+@router.post('/', auth=None)
 def create_module(request, payload: ModuleIn):
     """
     创建模块
@@ -30,10 +30,12 @@ def create_module(request, payload: ModuleIn):
     return response(item=model_to_dict(module))
 
 
-@router.get("/module/tree", auth=None)
+@router.get("/tree", auth=None)
 def get_module_tree(request, filters: ProjectIn = Query(...)):
     """
-    获取项目树
+    获取项目树：
+    1. 遍历所有有效项目数据
+    2. 递归获取当前节点的所有子节点
     auth=None 该接口不需要认证
     """
 
@@ -61,7 +63,7 @@ def get_module_tree(request, filters: ProjectIn = Query(...)):
     return response(item=data)
 
 
-@router.delete('/module/delete/{module_id}', auth=None)
+@router.delete('/delete/{module_id}', auth=None)
 def module_delete(request, module_id: int):
     """
     删除模块信息
