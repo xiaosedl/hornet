@@ -31,6 +31,7 @@ def project_list(request, **kwargs):
 def project_create(request, payload: CreateProjectIn):
     """
     创建项目
+    auth=None 该接口不需要认证
     """
 
     project = Project.objects.filter(name=payload.name)
@@ -66,6 +67,7 @@ def project_detail(request, project_id):
 def project_update(request, project_id: int, payload: CreateProjectIn):
     """
     更新项目信息
+    auth=None 该接口不需要认证
     """
 
     project = get_object_or_404(Project, id=project_id)
@@ -79,6 +81,7 @@ def project_update(request, project_id: int, payload: CreateProjectIn):
 def project_delete(request, project_id: int):
     """
     删除项目信息
+    auth=None 该接口不需要认证
     """
 
     project = get_object_or_404(Project, id=project_id)
@@ -94,6 +97,7 @@ def project_img_upload(request, file: UploadedFile = File(...)):
     1. post 方法 + form-data 格式
     2. 名称，大小
     3. 上传的文件需要保存：读取上传文件内容，写入到一个新文件中
+    auth=None 该接口不需要认证
     """
 
     # 获取上传文件后缀

@@ -15,7 +15,7 @@ router = Router()
 
 
 @router.post('/', auth=None)
-def create_module(request, payload: ModuleIn):
+def module_create(request, payload: ModuleIn):
     """
     创建模块
     auth=None 该接口不需要认证
@@ -71,6 +71,7 @@ def get_module_tree(request, filters: ProjectIn = Query(...)):
 def module_delete(request, module_id: int):
     """
     删除模块信息
+    auth=None，该接口不需要认证
     """
 
     module = get_object_or_404(Module, id=module_id)
@@ -81,10 +82,10 @@ def module_delete(request, module_id: int):
 
 @router.get('/{module_id}/cases/', auth=None, response=List[CaseOut])
 @paginate(CustomPagination, page_size=6)  # type: ignore
-def list_case(request, module_id: int,  **kwargs):
+def case_case(request, module_id: int,  **kwargs):
     """
     查询用例列表
     auth=None，该接口不需要认证
     """
 
-    return TestCase.objects.filter(module_id = module_id, is_delete=False).all()
+    return TestCase.objects.filter(module_id=module_id, is_delete=False).all()

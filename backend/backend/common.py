@@ -14,7 +14,7 @@ class Error:
 
     PROJECTS_IS_NULL = {"10010": "项目查询结果为空"}
     PROJECT_NAME_EXIST = {"10021": "项目名称已存在"}
-    PROJECT_NOT_EXIST = {"10022": "项目不存在存在"}
+    PROJECT_NOT_EXIST = {"10022": "项目不存在"}
     PROJECT_IS_DEELEE = {"10023": "项目已经被删除"}
 
     IMAGE_SIZE_ERROR = {"10031": "不支持大于 20M 的图片上传"}
@@ -22,7 +22,7 @@ class Error:
 
     MODULE_IS_NULL = {"10040": "模块查询结果为空"}
     MODULE_NAME_EXIST = {"10041": "模块名称已存在"}
-    MODULE_NOT_EXIST = {"10042": "模块存在"}
+    MODULE_NOT_EXIST = {"10042": "模块不存在"}
     MODULE_IS_DEELEE = {"10043": "模块已经被删除"}
 
     CASE_IS_NULL = {"10050": "测试用例查询结果为空"}
@@ -31,6 +31,11 @@ class Error:
     CASE_IS_DEELEE = {"10053": "测试用例已经被删除"}
     CASE_REQEUST_ERROR = {"10054": "请求方法和类型不符：[GET]-[Param]，[POST/PUT]-[Form/Json]"}
     ASSERT_TYPE_ERROR = {"10055": "断言类型错误"}
+
+    TASK_IS_NULL = {"10060": "任务查询结果为空"}
+    TASK_NAME_EXIST = {"10061": "任务名称已存在"}
+    TASK_NOT_EXIST = {"10062": "任务不存在"}
+    TASK_IS_DEELEE = {"10063": "任务已经被删除"}
 
 
 def model_to_dict(instance: object) -> dict:

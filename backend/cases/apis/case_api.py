@@ -11,7 +11,7 @@ router = Router()
 
 
 @router.post("/", auth=None)
-def create_case(request, data: CaseIn):
+def case_create(request, data: CaseIn):
     """
     创建用例
     auth=None，该接口不需要认证
@@ -28,7 +28,7 @@ def create_case(request, data: CaseIn):
 
 
 @router.post('/debug/', auth=None)
-def debug_case(request, data: CaseDebugIn):
+def case_debug(request, data: CaseDebugIn):
     """
     测试用例调试
     auth=None，该接口不需要认证
@@ -49,7 +49,7 @@ def debug_case(request, data: CaseDebugIn):
 
 
 @router.post("/assert/", auth=None)
-def assert_cast(request, data: CaseAssertIn):
+def cast_assert(request, data: CaseAssertIn):
     """
     断言判断
     auth=None，该接口不需要认证
@@ -73,7 +73,7 @@ def assert_cast(request, data: CaseAssertIn):
 
 
 @router.put("/update/{case_id}", auth=None)
-def update_case(request, case_id: int, data: CaseIn):
+def case_update(request, case_id: int, data: CaseIn):
     """
     用例更新
     auth=None，该接口不需要认证
@@ -87,7 +87,7 @@ def update_case(request, case_id: int, data: CaseIn):
 
 
 @router.delete("/delete/{case_id}", auth=None)
-def delete_case(request, case_id):
+def case_delete(request, case_id):
     """
     删除测试用例
     auth=None，该接口不需要认证
@@ -100,7 +100,7 @@ def delete_case(request, case_id):
 
 
 @router.get('/{case_id}/', auth=None)
-def detail_case(request, case_id):
+def case_detail(request, case_id):
     """
     获取项目详情
     auth=None，该接口不需要认证

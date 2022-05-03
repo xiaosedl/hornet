@@ -15,6 +15,7 @@ def user_register(request, payload: RegisterIn):
     用户注册
     1. 对注册对用户进行存在性校验
     2. 注册成功返回该注册用户信息
+    auth=None，该接口不需要认证
     """
 
     username = payload.username
@@ -45,6 +46,7 @@ def user_login(request, payload: LoginIn):
     用户登录
     1. 对用户进行校验
     2. 登录成功返回对应用户信息
+    auth=None，该接口不需要认证
     """
 
     username = payload.username
