@@ -4,6 +4,7 @@ import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
 import Navigation from "../views/Navigation";
 import About from "../views/About"
+import project from "../components/project/projectList"
 
 Vue.use(VueRouter);
 
@@ -41,6 +42,12 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         // component: () =>
         //     import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      },
+      {
+        // 当 /main/home 匹配成功，
+        // Home 会被渲染在 Navigation 的 <router-view> 中
+        path: "project",
+        component: project
       },
     ]
   },
