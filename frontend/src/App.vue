@@ -15,11 +15,20 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 0 auto;
+  height: 100%;
+}
+
+body {
+  margin: 1px 1px 1px;
 }
 
 #nav {
-  padding: 30px;
+  /*padding: 30px;*/
+  height: 100%;
+}
+
+html, body {
+  height: 100%;
 }
 
 #nav a {

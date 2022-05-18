@@ -1,41 +1,48 @@
 <template>
   <div class="home">
-    <h1>这是一个登录页面</h1>
-    <!--    <img alt="Vue logo" src="../assets/logo.png" />-->
-    <!--    <HelloWorld msg="Welcome to Your Vue.js App" />-->
-    <el-card class="box-card">
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="登录" name="first">
-          <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="loginForm.username"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="loginForm.password" type="password"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitLogin('loginForm')">登录</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="注册" name="second">
-          <el-form :model="registerForm" :rules="rules" ref="registerForm" label-position="left" label-width="100px" class="demo-ruleForm">
-            <el-form-item label="用户名" prop="username">
-              <el-input v-model="registerForm.username"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="password">
-              <el-input v-model="registerForm.password" type="password"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="password">
-              <el-input v-model="registerForm.confirm_password" type="password"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitRegister('registerForm')">注册</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
-    </el-card>
+    <div class="main-window">
+      <div class="main-desc">
+        <h2>接口测试平台</h2>
+        <p>项目管理、模块用例管理、任务执行、测试报告等功能</p>
+      </div>
+      <div class="login-window">
+        <el-card class="box-card">
+          <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+            <el-tab-pane label="登录" name="first">
+              <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="100px"
+                       class="demo-ruleForm">
+                <el-form-item label="用户名" prop="username">
+                  <el-input v-model="loginForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                  <el-input v-model="loginForm.password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitLogin('loginForm')">登录</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+            <el-tab-pane label="注册" name="second">
+              <el-form :model="registerForm" :rules="rules" ref="registerForm" label-position="left" label-width="100px"
+                       class="demo-ruleForm">
+                <el-form-item label="用户名" prop="username">
+                  <el-input v-model="registerForm.username"></el-input>
+                </el-form-item>
+                <el-form-item label="密码" prop="password">
+                  <el-input v-model="registerForm.password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item label="确认密码" prop="password">
+                  <el-input v-model="registerForm.confirm_password" type="password"></el-input>
+                </el-form-item>
+                <el-form-item>
+                  <el-button type="primary" @click="submitRegister('registerForm')">注册</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,30 +50,30 @@
 // @ is an alias to /src-->
 // import HelloWorld from "@/components/HelloWorld.vue";
 
-import UserAPi from "../request/user"
+import UserAPi from "../request/user";
 
 export default {
   data() {
     return {
       activeName: "first",
       loginForm: {
-        username: '',
-        password: '',
+        username: "",
+        password: ""
       },
       registerForm: {
-        username: '',
-        password: '',
-        confirm_password: '',
+        username: "",
+        password: "",
+        confirm_password: ""
       },
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' }
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         password: [
-          { required: true, message: '请输入密码', trigger: 'blur' }
+          { required: true, message: "请输入密码", trigger: "blur" }
         ],
         confirm_password: [
-          { required: true, message: '请输入确认密码', trigger: 'blur' }
+          { required: true, message: "请输入确认密码", trigger: "blur" }
         ]
       }
     };
@@ -83,14 +90,14 @@ export default {
           UserAPi.login(this.loginForm).then(resp => {
             console.log("login", resp);
             if (resp.success === true) {
-              sessionStorage.token = resp.item.token
-              sessionStorage.user = resp.item.username
-              this.$router.push({ path: "/main"})
-              this.$message.success('登录成功！')
+              sessionStorage.token = resp.item.token;
+              sessionStorage.user = resp.item.username;
+              this.$router.push({ path: "/main" });
+              this.$message.success("登录成功！");
             } else {
-              this.$message.error(resp.error.msg)
+              this.$message.error(resp.error.msg);
             }
-          })
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -108,11 +115,11 @@ export default {
               // sessionStorage.token = resp.item.token
               // sessionStorage.user = resp.item.username
               // this.$router.push({ path: "/home"})
-              this.$message.success('注册成功！')
+              this.$message.success("注册成功！");
             } else {
-              this.$message.error(resp.error.msg)
+              this.$message.error(resp.error.msg);
             }
-          })
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -121,14 +128,27 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style>
-.box-card {
-  width: 480px;
+.main-window {
+  text-align: center;
   margin: 0 auto;
+  width: 900px;
+  padding-top: 30%;
+}
+
+.main-desc {
+  float: left;
+  width: 350px;
+}
+
+.login-window {
+  float: left;
+  width: 400px;
+  margin-left: 50px;
 }
 </style>
