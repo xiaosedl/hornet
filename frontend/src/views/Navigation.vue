@@ -2,7 +2,7 @@
   <div class="navigation">
     <el-container class="el-container">
       <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <img class="logo" src="../assets/logo.png" alt="logo">
+        <img class="logo" src="../assets/favicon.png" alt="logo" />
         <el-menu>
           <router-link to="/main/project">
             <el-menu-item index="1" class="menu-option">
@@ -12,9 +12,7 @@
           </router-link>
           <router-link to="/main/about">
             <el-menu-item index="1" class="menu-option">
-              <template #title>
-                <i class="el-icon-s-home"></i>About
-              </template>
+              <template #title> <i class="el-icon-s-home"></i>About </template>
             </el-menu-item>
           </router-link>
         </el-menu>
@@ -42,7 +40,7 @@
 
 <style>
 .el-header {
-  background-color: #B3C0D1;
+  background-color: #b3c0d1;
   color: #333;
   line-height: 60px;
 }
@@ -52,12 +50,16 @@
 
 .el-container {
   height: 100%;
-  border: 1px solid #eee
+  border: 1px solid #eee;
 }
 
 .el-main {
   margin: 3px;
   background-color: whitesmoke;
+}
+
+a {
+  text-decoration: none;
 }
 
 el-aside {
@@ -70,10 +72,10 @@ export default {
   data() {
     return {
       user: "",
-    }
+    };
   },
   created() {
-     this.user = sessionStorage.getItem('user')
-  }
+    this.user = sessionStorage.getItem("user");
+  },
 };
 </script>

@@ -9,33 +9,60 @@
         <el-card class="box-card">
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="登录" name="first">
-              <el-form :model="loginForm" :rules="rules" ref="loginForm" label-position="left" label-width="100px"
-                       class="demo-ruleForm">
+              <el-form
+                :model="loginForm"
+                :rules="rules"
+                ref="loginForm"
+                label-position="left"
+                label-width="100px"
+                class="demo-ruleForm"
+              >
                 <el-form-item label="用户名" prop="username">
                   <el-input v-model="loginForm.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                  <el-input v-model="loginForm.password" type="password"></el-input>
+                  <el-input
+                    v-model="loginForm.password"
+                    type="password"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitLogin('loginForm')">登录</el-button>
+                  <el-button type="primary" @click="submitLogin('loginForm')"
+                    >登录</el-button
+                  >
                 </el-form-item>
               </el-form>
             </el-tab-pane>
             <el-tab-pane label="注册" name="second">
-              <el-form :model="registerForm" :rules="rules" ref="registerForm" label-position="left" label-width="100px"
-                       class="demo-ruleForm">
+              <el-form
+                :model="registerForm"
+                :rules="rules"
+                ref="registerForm"
+                label-position="left"
+                label-width="100px"
+                class="demo-ruleForm"
+              >
                 <el-form-item label="用户名" prop="username">
                   <el-input v-model="registerForm.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
-                  <el-input v-model="registerForm.password" type="password"></el-input>
+                  <el-input
+                    v-model="registerForm.password"
+                    type="password"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="确认密码" prop="password">
-                  <el-input v-model="registerForm.confirm_password" type="password"></el-input>
+                  <el-input
+                    v-model="registerForm.confirm_password"
+                    type="password"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitRegister('registerForm')">注册</el-button>
+                  <el-button
+                    type="primary"
+                    @click="submitRegister('registerForm')"
+                    >注册</el-button
+                  >
                 </el-form-item>
               </el-form>
             </el-tab-pane>
@@ -58,24 +85,22 @@ export default {
       activeName: "first",
       loginForm: {
         username: "",
-        password: ""
+        password: "",
       },
       registerForm: {
         username: "",
         password: "",
-        confirm_password: ""
+        confirm_password: "",
       },
       rules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          { required: true, message: "请输入用户名", trigger: "blur" },
         ],
-        password: [
-          { required: true, message: "请输入密码", trigger: "blur" }
-        ],
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
         confirm_password: [
-          { required: true, message: "请输入确认密码", trigger: "blur" }
-        ]
-      }
+          { required: true, message: "请输入确认密码", trigger: "blur" },
+        ],
+      },
     };
   },
   methods: {
@@ -87,7 +112,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert("submit!");
-          UserAPi.login(this.loginForm).then(resp => {
+          UserAPi.login(this.loginForm).then((resp) => {
             console.log("login", resp);
             if (resp.success === true) {
               sessionStorage.token = resp.item.token;
@@ -109,7 +134,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           // alert("submit!");
-          UserAPi.register(this.registerForm).then(resp => {
+          UserAPi.register(this.registerForm).then((resp) => {
             console.log("login", resp);
             if (resp.success === true) {
               // sessionStorage.token = resp.item.token
@@ -128,8 +153,8 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
-    }
-  }
+    },
+  },
 };
 </script>
 

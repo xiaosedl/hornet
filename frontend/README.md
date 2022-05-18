@@ -25,5 +25,13 @@ npm run test:e2e
 npm run lint
 ```
 
+
+### fix prettier error
+```angular2html
+yarn run lint --fix
+```
+
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
