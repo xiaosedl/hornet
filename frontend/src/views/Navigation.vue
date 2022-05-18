@@ -1,17 +1,25 @@
 <template>
   <div class="navigation">
     <el-container class="el-container">
-      <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <img class="logo" src="../assets/favicon.png" alt="logo" />
-        <el-menu>
+      <el-aside width="200px" style="background-color: #1e2531">
+        <img class="logo" src="../assets/logo.svg" alt="logo" />
+        <el-menu style="background-color: #1e2531">
           <router-link to="/main/project">
-            <el-menu-item index="1" class="menu-option">
+            <el-menu-item
+              index="1"
+              class="menu-option"
+              style="color: dodgerblue"
+            >
               <i class="el-icon-menu"></i>
               <template #title>项目管理</template>
             </el-menu-item>
           </router-link>
           <router-link to="/main/about">
-            <el-menu-item index="1" class="menu-option">
+            <el-menu-item
+              index="1"
+              class="menu-option"
+              style="color: dodgerblue"
+            >
               <template #title> <i class="el-icon-s-home"></i>About </template>
             </el-menu-item>
           </router-link>
@@ -44,6 +52,7 @@
   color: #333;
   line-height: 60px;
 }
+
 .navigation {
   height: 100%;
 }
