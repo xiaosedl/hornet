@@ -1,8 +1,8 @@
 import request from "@/HttpCommon.js";
 
-class UserApi {
-  login(data) {
-    return request.post("/api/users/login", data);
+class ProjectApi {
+  getProjects(data) {
+    return request.get("/api/projects/list/", data);
   }
 
   logout(data) {
@@ -14,4 +14,4 @@ class UserApi {
   }
 }
 
-export default new UserApi();
+export default new ProjectApi();
