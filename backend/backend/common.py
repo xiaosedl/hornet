@@ -65,6 +65,8 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
 
     if item is None:
         item = []
+    elif isinstance(item, str):
+        item = item
     elif isinstance(item, dict):
         item = item
     elif isinstance(item, object):

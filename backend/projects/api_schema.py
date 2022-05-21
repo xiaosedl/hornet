@@ -5,8 +5,8 @@ from typing import Any
 class CreateProjectIn(Schema):
     """创建项目入参"""
     name: str
-    describe: str = None
-    image: str = None
+    describe: str = ""
+    image: str = ""
 
 
 class ProjectOut(Schema):
