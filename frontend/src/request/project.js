@@ -5,12 +5,20 @@ class ProjectApi {
     return request.get("/api/projects/list/", data);
   }
 
-  logout(data) {
-    return request.post("/api/users/logout", data);
+  getProject(id) {
+    return request.get("/api/projects/" + id + "/");
   }
 
-  register(data) {
-    return request.post("/api/users/register", data);
+  createProject(data) {
+    return request.post("/api/projects/", data);
+  }
+
+  updateProject(id, data) {
+    return request.put("/api/projects/update/" + id + "/", data);
+  }
+
+  deleteProject(id) {
+    return request.delete("/api/projects/delete/" + id + "/");
   }
 }
 

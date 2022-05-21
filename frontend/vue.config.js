@@ -2,7 +2,7 @@
 
 module.exports = {
   runtimeCompiler: true,
-  publicPath: "./", // 设置打包文件相对路径
+  publicPath: "/", // 设置打包文件相对路径
   outputDir: "dist", // 构建时输出的目录根路径
   // assertDir: 'static',  // 放置静态资源的目录
   // indexPath: 'index.html', // HTML 输出的路径

@@ -2,7 +2,9 @@
   <div class="navigation">
     <el-container class="el-container">
       <el-aside width="200px" style="background-color: #1e2531">
-        <img class="logo" src="../assets/logo.svg" alt="logo" />
+        <div style="margin: 20px">
+          <img class="logo" src="../assets/logo.svg" alt="logo" />
+        </div>
         <el-menu style="background-color: #1e2531">
           <router-link to="/main/project">
             <el-menu-item
@@ -25,7 +27,7 @@
           </router-link>
         </el-menu>
       </el-aside>
-      <el-container>
+      <el-container class="el-container-sub">
         <el-header class="el-header" style="text-align: right; font-size: 12px">
           <el-dropdown>
             <i class="el-icon-setting" style="margin-right: 15px"></i>
@@ -38,7 +40,6 @@
           <span>欢迎～{{ user }}</span>
         </el-header>
         <el-main class="el-main">
-          <h1>这个位置渲染子组件</h1>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -63,7 +64,7 @@
 }
 
 .el-main {
-  margin: 3px;
+  margin: 1px;
   background-color: whitesmoke;
 }
 
