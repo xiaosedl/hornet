@@ -27,7 +27,10 @@
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitLogin('loginForm')"
+                  <el-button
+                    style="width: 258px"
+                    type="primary"
+                    @click="submitLogin('loginForm')"
                     >登录</el-button
                   >
                 </el-form-item>
@@ -59,6 +62,7 @@
                 </el-form-item>
                 <el-form-item>
                   <el-button
+                    style="width: 258px"
                     type="primary"
                     @click="submitRegister('registerForm')"
                     >注册</el-button
@@ -160,10 +164,9 @@ export default {
 
 <style>
 .main-window {
-  text-align: center;
   margin: 0 auto;
   width: 900px;
-  padding-top: 30%;
+  padding-top: 18%;
 }
 
 .main-desc {

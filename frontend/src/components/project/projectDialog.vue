@@ -18,6 +18,23 @@
       <el-form-item label="项目描述" prop="describe">
         <el-input type="textarea" v-model="projectForm.describe"></el-input>
       </el-form-item>
+      <el-form-item label="图片" prop="desc">
+        <div id="image">
+          <el-upload
+            action="#"
+            :before-upload="beforeUpload"
+            list-type="picture-card"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :file-list="fileList"
+          >
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <el-dialog>
+            <img width="100%" :src="imageUrl" alt="" />
+          </el-dialog>
+        </div>
+      </el-form-item>
       <el-form-item style="text-align: right">
         <el-button @click="closeDialog">取消</el-button>
         <el-button type="primary" @click="submitForm('projectForm')"
@@ -37,13 +54,17 @@ export default {
   projectData: [],
   data() {
     return {
-      imgUploadUrl: "http://127.0.0.1:8000/api/projucts/upload",
+      // imgUploadUrl: "http://127.0.0.1:8000/api/projucts/upload",
+      imageUrl: "",
+      imageVisible: false,
       dialogVisible: true,
+      fileList: [],
+      disable: false,
       showTitle: "",
       projectForm: {
         name: "",
         desc: "",
-        image: "e4df4540c6d1861b09bdc5bcb1b312ef.jpg",
+        image: "",
       },
       rules: {
         name: [
@@ -121,6 +142,53 @@ export default {
         }
       });
     },
+
+    // 删除图片
+    handleRemove(file) {
+      console.log("删除图片", file);
+      this.fileList.remove(file);
+    },
+
+    // 预览图片
+    handlePreview(file, fileList) {
+      console.log("上传成功", file, fileList);
+      this.imageUrl = file.url;
+      this.imageVisible = true;
+    },
+
+    // 上传图片
+    beforeUpload(file) {
+      console.log("file", file);
+
+      let fd = new FormData();
+      fd.append("file", file);
+
+      ProjectApi.uploadImage(fd).then((resp) => {
+        console.log("resp--->", resp.data);
+        if (resp.data.success === true) {
+          this.projectForm.image = resp.data.item.name;
+          const imagePath = "/static/images/" + resp.data.item;
+          console.log("imagePath--->", imagePath);
+
+          this.fileList.push({
+            name: file.name,
+            url: imagePath,
+          });
+          console.log("fileList", this.fileList);
+          this.$message.success("上传成功");
+        } else {
+          console.log("上传失败", resp);
+          this.$message.error(resp.data.error.message);
+        }
+      });
+      return true;
+    },
   },
 };
 </script>
+
+<style scoped>
+#image {
+  text-align: left;
+}
+</style>

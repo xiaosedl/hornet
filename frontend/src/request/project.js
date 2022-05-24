@@ -1,4 +1,5 @@
 import request from "@/HttpCommon.js";
+import axios from "axios";
 
 class ProjectApi {
   getProjects(data) {
@@ -19,6 +20,15 @@ class ProjectApi {
 
   deleteProject(id) {
     return request.delete("/api/projects/delete/" + id + "/");
+  }
+
+  uploadImage(data) {
+    return axios({
+      method: "post",
+      url: "/api/projects/upload",
+      timeout: 20000,
+      data: data,
+    });
   }
 }
 

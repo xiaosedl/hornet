@@ -69,6 +69,8 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
         item = item
     elif isinstance(item, dict):
         item = item
+    elif isinstance(item, list):
+        item = item
     elif isinstance(item, object):
         item = model_to_dict(item)
 
