@@ -114,7 +114,7 @@ def project_img_upload(request, file: UploadedFile = File(...)):
     file_name = file_md5 + "." + suffix
 
     # 保存图片
-    upload_file = os.path.join(IMAGE_DIR, file_name )
+    upload_file = os.path.join(IMAGE_DIR, file_name)
     with open(upload_file, 'wb+') as f:
         for chunk in file.chunks():
             f.write(chunk)

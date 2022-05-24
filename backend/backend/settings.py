@@ -119,6 +119,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
+# 项目文件目录
+IMAGE_DIR = os.path.join(BASE_DIR, "static", "images")
+
 STATIC_URL = 'static/'
 
 # Default primary key field type
@@ -126,4 +129,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-IMAGE_DIR = os.path.join(BASE_DIR, "resources", "image")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]
