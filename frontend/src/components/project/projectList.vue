@@ -36,8 +36,9 @@
             </div>
             <div style="margin: 5px">
               <img
-                src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                :src="item.image"
                 class="image"
+                style="width: 200px; height: 200px"
               />
             </div>
           </el-card>
@@ -106,6 +107,11 @@ export default {
       const resp = await ProjectApi.getProjects(this.req);
       console.log("--->", resp);
       if (resp.success === true) {
+        // 处理图片访问路径
+        for (let i = 0; i < resp.items.length; i++) {
+          resp.items[i].image = "/static/images/" + resp.items[i].image
+        }
+
         this.projectData = resp.items;
         this.total = resp.total;
         this.$message.success("查询成功！");

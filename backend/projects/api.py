@@ -38,6 +38,8 @@ def project_create(request, payload: CreateProjectIn):
     if len(project) > 0:
         return response(error=Error.PROJECT_NAME_EXIST)
 
+    if payload.image == "":
+        payload.image = "default_image.jpg"
     Project.objects.create(**payload.dict())
     return response()
 

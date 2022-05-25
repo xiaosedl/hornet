@@ -30,7 +30,7 @@
           >
             <i class="el-icon-plus"></i>
           </el-upload>
-          <el-dialog>
+          <el-dialog :visible.sync="imageVisible">
             <img width="100%" :src="imageUrl" alt="" />
           </el-dialog>
         </div>
@@ -54,7 +54,7 @@ export default {
   projectData: [],
   data() {
     return {
-      // imgUploadUrl: "http://127.0.0.1:8000/api/projucts/upload",
+      imgUploadUrl: "http://127.0.0.1:8000/api/projucts/upload",
       imageUrl: "",
       imageVisible: false,
       dialogVisible: true,
@@ -102,6 +102,10 @@ export default {
       console.log("--->", resp);
       if (resp.success === true) {
         this.projectForm = resp.item;
+        this.fileList.push({
+          name: this.projectForm.image,
+          url: "/static/images/" + resp.item.image
+        })
         this.$message.success("查询项目详情成功！");
         console.log("----->", resp.total);
       } else {
@@ -166,7 +170,8 @@ export default {
       ProjectApi.uploadImage(fd).then((resp) => {
         console.log("resp--->", resp.data);
         if (resp.data.success === true) {
-          this.projectForm.image = resp.data.item.name;
+          this.projectForm.image = resp.data.item;
+          console.log("projectForm", this.projectForm);
           const imagePath = "/static/images/" + resp.data.item;
           console.log("imagePath--->", imagePath);
 
