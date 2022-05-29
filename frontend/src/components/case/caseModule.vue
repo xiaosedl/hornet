@@ -19,7 +19,7 @@
       </el-select>
     </div>
     <div class="block">
-      <el-card style="width: 30%; margin-top: 20px">
+      <el-card style="width: 28%; margin: 20px 0; float: left">
         <el-button
           type="text"
           icon="el-icon-circle-plus-outline"
@@ -33,6 +33,7 @@
           node-key="id"
           default-expand-all
           :expand-on-click-node="false"
+          @node-click="nodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
             <span>{{ node.label }}</span>
@@ -40,24 +41,76 @@
               <el-button type="text" size="mini" @click="() => append(data)">
                 <i class="el-icon-circle-plus-outline"></i>
               </el-button>
-              <el-button
-                type="text"
-                size="mini"
-                @click="() => remove(node, data)"
-              >
+              <el-button type="text" size="mini" @click="() => remove(data)">
                 <i class="el-icon-remove-outline"></i>
               </el-button>
             </span>
           </span>
         </el-tree>
       </el-card>
+      <el-table
+        :data="caseData"
+        border
+        header-align="center"
+        style="width: 70%; margin: 20px 0; float: right"
+      >
+        <el-table-column
+          prop="id"
+          label="ID"
+          width="50px"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          label="名称"
+          width="180"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="method"
+          label="请求方法"
+          width="80px"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="url"
+          label="请求地址"
+          width="200px"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="module.name"
+          label="模块名称"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="create_time"
+          label="创建时间"
+          width="180"
+          header-align="center"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="update_time"
+          label="更新时间"
+          width="180"
+          header-align="center"
+        >
+        </el-table-column>
+      </el-table>
     </div>
     <!--组件中，引入子组件-->
     <moduleDialog
       v-if="dialogFlag"
-      :pid="projectValue"
-      :plabel="projectLabel"
-      :rootId="rootFlag"
+      :projectId="projectValue"
+      :projectLabel="projectLabel"
+      :parentObj="parentObj"
+      :rootFlag="rootFlag"
       @cancel="closeDialog"
     ></moduleDialog>
   </div>
@@ -67,8 +120,6 @@
 import ProjectApi from "../../request/project";
 import ModuleApi from "../../request/module";
 import moduleDialog from "./moduleDialog";
-
-let id = 1000;
 
 export default {
   name: "caseModule",
@@ -84,6 +135,8 @@ export default {
       rootFlag: 1,
       dialogFlag: false,
       currentProjectId: "",
+      parentObj: {},
+      caseData: [],
     };
   },
 
@@ -125,8 +178,8 @@ export default {
     },
 
     // 查询模块列表，树形结构
-    async initModuleList(pid) {
-      const req = { project_id: pid };
+    async initModuleList(projectId) {
+      const req = { project_id: projectId };
       const resp = await ModuleApi.getModuleTree(req);
       console.log("getModules--->", resp.items);
       if (resp.success === true) {
@@ -138,23 +191,26 @@ export default {
 
     // 创建子节点
     append(data) {
-      console.log("data:", data);
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+      console.log("新增子模块", data);
+      this.dialogFlag = true;
+      this.rootFlag = false;
+      this.parentObj = data;
     },
 
     // 删除节点
-    remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex((d) => d.id === data.id);
-      children.splice(index, 1);
+    remove(data) {
+      console.log("删除子模块", data);
+      ModuleApi.deleteModule(data.id).then((resp) => {
+        if (resp.success === true) {
+          this.$message.success("删除成功！");
+          this.initModuleList(this.projectValue);
+        } else {
+          this.$message.error(resp.error.msg);
+        }
+      });
     },
 
-    // 展示创建弹窗
+    // 创建根节点弹窗
     createRootDialog() {
       this.dialogFlag = true;
       this.rootFlag = 1;
@@ -163,10 +219,27 @@ export default {
     // 关闭弹窗
     closeDialog() {
       this.dialogFlag = false;
+      this.parentObj = {};
       this.initModuleList(this.projectValue);
     },
 
-    // 跟节点弹窗
+    // 点击了节点
+    nodeClick(data) {
+      console.log("点击了节点", data);
+      this.initCaseList(data.id);
+    },
+
+    // 初始化用例
+    async initCaseList(mid) {
+      const resp = await ModuleApi.getModuleCases(mid);
+      if (resp.success === true) {
+        console.log("case", resp);
+        this.caseData = resp.items;
+        this.$message.success("查询用例成功");
+      } else {
+        this.$message.error(resp.error.mag);
+      }
+    },
   },
 };
 </script>

@@ -12,8 +12,11 @@
       label-width="100px"
       class="demo-ruleForm"
     >
-      <el-form-item label="项目名称" prop="name">
-        <el-input v-model="plabel" disabled></el-input>
+      <el-form-item label="项目" prop="name">
+        <el-input v-model="projectLabel" disabled></el-input>
+      </el-form-item>
+      <el-form-item label="父节点" v-if="rootFlag !== 1">
+        <el-input v-model="parentObj.label" disabled></el-input>
       </el-form-item>
       <el-form-item label="模块名称" prop="name">
         <el-input v-model="moduleForm.name"></el-input>
@@ -33,7 +36,7 @@ import ModuleApi from "../../request/module";
 
 export default {
   name: "Dialog",
-  props: ["title", "pid", "rootId", "plabel"],
+  props: ["title", "projectId", "rootFlag", "projectLabel", "parentObj"],
   projectData: [],
   data() {
     return {
@@ -59,11 +62,12 @@ export default {
     };
   },
   mounted() {
-    this.moduleForm.project_id = this.pid;
-    if (this.rootId === 1) {
+    this.moduleForm.project_id = this.projectId;
+    if (this.rootFlag === 1) {
       this.showTitle = "创建根节点";
     } else {
       this.showTitle = "创建子节点";
+      this.moduleForm.parent_id = this.parentObj.id;
     }
   },
   methods: {
@@ -78,15 +82,15 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-            ModuleApi.createModule(this.moduleForm).then((resp) => {
-              console.log("createProject", resp);
-              if (resp.success === true) {
-                this.$message.success("创建成功！");
-                this.closeDialog();
-              } else {
-                this.$message.error(resp.error.msg);
-              }
-            });
+          ModuleApi.createModule(this.moduleForm).then((resp) => {
+            console.log("createProject", resp);
+            if (resp.success === true) {
+              this.$message.success("创建成功！");
+              this.closeDialog();
+            } else {
+              this.$message.error(resp.error.msg);
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
