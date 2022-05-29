@@ -104,8 +104,8 @@ export default {
         this.projectForm = resp.item;
         this.fileList.push({
           name: this.projectForm.image,
-          url: "/static/images/" + resp.item.image
-        })
+          url: "/static/images/" + resp.item.image,
+        });
         this.$message.success("查询项目详情成功！");
         console.log("----->", resp.total);
       } else {

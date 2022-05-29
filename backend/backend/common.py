@@ -63,25 +63,25 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
         error_code = list(error.keys())[0]
         error_msg = list(error.values())[0]
 
-    if item is None:
-        item = []
-    elif isinstance(item, str):
-        item = item
-    elif isinstance(item, dict):
-        item = item
-    elif isinstance(item, list):
-        item = item
-    elif isinstance(item, object):
-        item = model_to_dict(item)
-
     resp_dict = {
         "success": success,
         "error": {
             "code": error_code,
             "msg": error_msg
-        },
-        "item": item
+        }
     }
+
+    if isinstance(item, str):
+        resp_dict["item"] = item
+    elif isinstance(item, dict):
+        resp_dict["item"] = item
+    elif isinstance(item, list):
+        resp_dict["items"] = item
+    elif isinstance(item, object):
+        item = model_to_dict(item)
+        resp_dict["item"] = item
+    else:
+        resp_dict["item"] = []
 
     return resp_dict
 

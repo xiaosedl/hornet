@@ -1,60 +1,58 @@
 <template>
   <div class="project">
-    <el-card class="box-card">
-      <div style="text-align: left">
-        <el-button type="primary" style="height: 50px" @click="showDialog"
-          >创建</el-button
-        >
-      </div>
-      <div v-for="(item, index) in projectData" :key="index" class="item">
-        <el-col :span="7" class="project-card">
-          <el-card>
-            <div slot="header" class="clearfix">
-              <span>{{ item.name }}</span>
-              <div style="float: right">
-                <el-dropdown>
-                  <span class="el-dropdown-link">
-                    <i class="el-icon-setting"></i>
-                  </span>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item command="edit">
-                      <el-button type="text" @click="showEdit(item.id)"
-                        >编辑</el-button
-                      >
-                    </el-dropdown-item>
-                    <el-dropdown-item command="delete">
-                      <el-button type="text" @click="deleteProject(item.id)"
-                        >删除</el-button
-                      >
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
+    <div style="text-align: left">
+      <el-button type="primary" style="height: 50px" @click="showDialog"
+        >创建</el-button
+      >
+    </div>
+    <div v-for="(item, index) in projectData" :key="index" class="item">
+      <el-col :span="7" class="project-card">
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>{{ item.name }}</span>
+            <div style="float: right">
+              <el-dropdown>
+                <span class="el-dropdown-link">
+                  <i class="el-icon-setting"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item command="edit">
+                    <el-button type="text" @click="showEdit(item.id)"
+                      >编辑</el-button
+                    >
+                  </el-dropdown-item>
+                  <el-dropdown-item command="delete">
+                    <el-button type="text" @click="deleteProject(item.id)"
+                      >删除</el-button
+                    >
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
-            <div style="height: 30px">
-              {{ item.describe }}
-            </div>
-            <div style="margin: 5px">
-              <img
-                :src="item.image"
-                class="image"
-                style="width: 200px; height: 200px"
-              />
-            </div>
-          </el-card>
-        </el-col>
-      </div>
-      <div style="width: 100%; float: right; text-align: right; margin: 10px">
-        <el-pagination
-          @current-change="handleCurrentChange"
-          background
-          layout="prev, pager, next"
-          :page-size="req.size"
-          :total="total"
-        >
-        </el-pagination>
-      </div>
-    </el-card>
+          </div>
+          <div style="height: 30px">
+            {{ item.describe }}
+          </div>
+          <div style="margin: 5px">
+            <img
+              :src="item.image"
+              class="image"
+              style="width: 200px; height: 200px"
+            />
+          </div>
+        </el-card>
+      </el-col>
+    </div>
+    <div style="width: 100%; float: right; text-align: right; margin: 10px">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        background
+        layout="prev, pager, next"
+        :page-size="req.size"
+        :total="total"
+      >
+      </el-pagination>
+    </div>
     <!--组件中，引入子组件-->
     <projectDialog
       v-if="dialogFlag"
@@ -97,19 +95,20 @@ export default {
     };
   },
 
-  // 加载组件同时获取项目列表
-  created() {
+  mounted() {
+    // 加载 vue 组件同时获取项目列表
     this.initProjectList();
   },
 
   methods: {
+    // 初始化项目列表
     async initProjectList() {
       const resp = await ProjectApi.getProjects(this.req);
       console.log("--->", resp);
       if (resp.success === true) {
         // 处理图片访问路径
         for (let i = 0; i < resp.items.length; i++) {
-          resp.items[i].image = "/static/images/" + resp.items[i].image
+          resp.items[i].image = "/static/images/" + resp.items[i].image;
         }
 
         this.projectData = resp.items;
