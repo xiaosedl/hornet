@@ -17,6 +17,13 @@
         >
         </el-option>
       </el-select>
+      <el-button
+        @click="caseCreate"
+        type="primary"
+        style="margin-left: 16px; float: right"
+      >
+        点我打开
+      </el-button>
     </div>
     <div class="block">
       <el-card style="width: 28%; margin: 20px 0; float: left">
@@ -51,6 +58,7 @@
       <el-table
         :data="caseData"
         border
+        @row-click="caseRowClick"
         header-align="center"
         style="width: 70%; margin: 20px 0; float: right"
       >
@@ -104,7 +112,18 @@
         </el-table-column>
       </el-table>
     </div>
-    <!--组件中，引入子组件-->
+
+    <el-drawer
+      :title="caseTitle"
+      v-model="drawer"
+      :visible.sync="drawer"
+      direction="rtl"
+      size="50%"
+    >
+      <span>我来啦!</span>
+    </el-drawer>
+
+    <!--引入模块弹窗子组件-->
     <moduleDialog
       v-if="dialogFlag"
       :projectId="projectValue"
@@ -113,6 +132,9 @@
       :rootFlag="rootFlag"
       @cancel="closeDialog"
     ></moduleDialog>
+
+    <!--引入用例抽屉子组件-->
+    <caseDialog></caseDialog>
   </div>
 </template>
 
@@ -120,11 +142,13 @@
 import ProjectApi from "../../request/project";
 import ModuleApi from "../../request/module";
 import moduleDialog from "./moduleDialog";
+import caseDialog from "./caseDialog";
 
 export default {
   name: "caseModule",
   components: {
     moduleDialog,
+    caseDialog,
   },
   data() {
     return {
@@ -137,6 +161,8 @@ export default {
       currentProjectId: "",
       parentObj: {},
       caseData: [],
+      drawer: false,
+      caseTitle: "",
     };
   },
 
@@ -240,11 +266,24 @@ export default {
         this.$message.error(resp.error.mag);
       }
     },
+
+    // 点击用例，弹出抽屉，查看用例
+    caseRowClick(row) {
+      console.log("row", row);
+      this.drawer = true;
+      this.caseTitle = "查看用例";
+    },
+
+    // 创建用例
+    caseCreate() {
+      this.drawer = true;
+      this.caseTitle = "创建用例";
+    },
   },
 };
 </script>
 
-<style>
+<style scoped>
 .custom-tree-node {
   flex: 1;
   display: flex;
