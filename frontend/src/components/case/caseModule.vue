@@ -120,7 +120,8 @@
       direction="rtl"
       size="50%"
     >
-      <span>我来啦!</span>
+      <!--引入用例抽屉子组件-->
+      <caseDialog></caseDialog>
     </el-drawer>
 
     <!--引入模块弹窗子组件-->
@@ -132,9 +133,6 @@
       :rootFlag="rootFlag"
       @cancel="closeDialog"
     ></moduleDialog>
-
-    <!--引入用例抽屉子组件-->
-    <caseDialog></caseDialog>
   </div>
 </template>
 
