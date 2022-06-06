@@ -60,7 +60,7 @@
         border
         @row-click="caseRowClick"
         header-align="center"
-        style="width: 70%; margin: 20px 0; float: right;"
+        style="width: 70%; margin: 20px 0; float: right"
       >
         <el-table-column
           prop="id"

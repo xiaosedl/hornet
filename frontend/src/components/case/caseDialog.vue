@@ -2,7 +2,12 @@
   <div style="margin: 20px">
     <div class="div-line" style="float: left; width: 100%">
       <div style="float: left; width: 15%">
-        <el-select v-model="caseForm.method" size="small" clearable placeholder="请选择">
+        <el-select
+          v-model="caseForm.method"
+          size="small"
+          clearable
+          placeholder="请选择"
+        >
           <el-option
             v-for="method in methodOptions"
             :key="method.value"
@@ -21,7 +26,9 @@
         ></el-input>
       </div>
       <div style="float: right">
-        <el-button type="primary" size="small" @click="clickSend">发送</el-button>
+        <el-button type="primary" size="small" @click="clickSend"
+          >发送</el-button
+        >
       </div>
     </div>
     <div class="div-line" style="float: left; margin: 20px 0">
@@ -32,10 +39,16 @@
     <div class="div-line" style="float: left; width: 100%">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="Header" name="first">
-          <vueJsonEditor v-model="caseForm.header" :mode="'code'"></vueJsonEditor>
+          <vueJsonEditor
+            v-model="caseForm.header"
+            :mode="'code'"
+          ></vueJsonEditor>
         </el-tab-pane>
         <el-tab-pane label="Params/Body" name="second">
-          <vueJsonEditor v-model="caseForm.params_body" :mode="'code'"></vueJsonEditor
+          <vueJsonEditor
+            v-model="caseForm.params_body"
+            :mode="'code'"
+          ></vueJsonEditor
         ></el-tab-pane>
       </el-tabs>
     </div>
@@ -51,7 +64,7 @@
     <div class="div-line">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item title="断言" name="1">
-          <div class="div-line" style="float: left; margin: 20px 0">
+          <div class="div-line" style="float: left; margin: 10px 0">
             <el-radio
               v-model="caseForm.assert_type"
               name="include"
@@ -61,7 +74,11 @@
             <el-radio v-model="caseForm.assert_type" label="equal"
               >Equal</el-radio
             >
-            <el-button style="float: right" type="success" size="small"
+            <el-button
+              style="float: right"
+              type="success"
+              size="small"
+              @click="clickAssert"
               >断言</el-button
             >
           </div>
@@ -70,7 +87,7 @@
               type="textarea"
               :rows="6"
               placeholder="Assert Content"
-              v-model="caseForm.assert_type"
+              v-model="caseForm.assert_text"
             >
             </el-input>
           </div>
@@ -87,7 +104,9 @@
         ></el-input>
       </div>
       <div style="float: right; margin-bottom: 50px">
-        <el-button type="primary" size="small">保存</el-button>
+        <el-button type="primary" size="small" @click="clickSave"
+          >保存</el-button
+        >
       </div>
     </div>
   </div>
@@ -138,7 +157,7 @@ export default {
         url: "http://httpbin.org/post",
         name: "",
         method: "",
-        header: {token: "123"},
+        header: { token: "123" },
         params_type: "Params",
         params_body: {},
         response: "",
@@ -160,13 +179,40 @@ export default {
 
     // 发送
     async clickSend() {
-      const resp = await CaseApi.debugCase(this.caseForm)
+      const resp = await CaseApi.debugCase(this.caseForm);
       if (resp.success === true) {
-        this.$message("获取用例详情成功")
+        this.$message.success("请求成功");
         console.log("resp---", resp);
-        this.caseForm.response = resp.item.response
+        this.caseForm.response = resp.item.response;
       } else {
-        this.$message("获取用例详情失败")
+        this.$message.error(resp.error.msg);
+      }
+    },
+
+    // 点击断言
+    async clickAssert() {
+      const req = {
+        response: this.caseForm.response,
+        assert_type: this.caseForm.assert_type,
+        assert_text: this.caseForm.assert_text,
+      };
+      const resp = await CaseApi.assertCase(req);
+      if (resp.success === true) {
+        this.$message.success("断言成功");
+      } else {
+        this.$message.error("断言失败");
+      }
+    },
+
+    // 保存用例
+    async clickSave() {
+      console.log("req--->", this.caseForm);
+      const resp = await CaseApi.createCase(this.caseForm);
+      if (resp.success === true) {
+        console.log("resp--->", resp);
+        this.$message.success("保存用例成功");
+      } else {
+        this.$message.error(resp.error.msg);
       }
     },
   },
