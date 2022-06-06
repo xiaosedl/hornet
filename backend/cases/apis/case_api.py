@@ -41,7 +41,7 @@ def case_debug(request, data: CaseDebugIn):
         resp = requests.request(method=method, url=data.url, headers=data.header, params=data.params_body).text
     elif method in ["POST", "PUT", "DELETE"] and params_type.title() == "Form":
         resp = requests.request(method=method, url=data.url, headers=data.header, data=data.params_body).text
-    elif method in {"POST", "PUT", "DELETE"} and params_type.title() == "Json":
+    elif method in ["POST", "PUT", "DELETE"] and params_type.title() == "Json":
         resp = requests.request(method=method, url=data.url, headers=data.header, json=data.params_body).text
     else:
         return response(error=Error.CASE_REQEUST_ERROR)
