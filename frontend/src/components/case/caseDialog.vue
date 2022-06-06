@@ -2,7 +2,7 @@
   <div style="margin: 20px">
     <div class="div-line" style="float: left; width: 100%">
       <div style="float: left; width: 15%">
-        <el-select v-model="value" size="small" clearable placeholder="请选择">
+        <el-select v-model="caseForm.method" size="small" clearable placeholder="请选择">
           <el-option
             v-for="method in methodOptions"
             :key="method.value"
@@ -14,28 +14,28 @@
       </div>
       <div style="float: left; margin: 0 1px; width: 76%">
         <el-input
-          v-model="input"
+          v-model="caseForm.url"
           size="small"
           clearable
           placeholder="请输入 URL"
         ></el-input>
       </div>
       <div style="float: right">
-        <el-button type="primary" size="small">发送</el-button>
+        <el-button type="primary" size="small" @click="clickSend">发送</el-button>
       </div>
     </div>
     <div class="div-line" style="float: left; margin: 20px 0">
-      <el-radio v-model="paramType" label="1">Params</el-radio>
-      <el-radio v-model="paramType" label="2">Form-data</el-radio>
-      <el-radio v-model="paramType" label="3">JSON</el-radio>
+      <el-radio v-model="caseForm.params_type" label="Params">Params</el-radio>
+      <el-radio v-model="caseForm.params_type" label="Form">Form-data</el-radio>
+      <el-radio v-model="caseForm.params_type" label="Json">JSON</el-radio>
     </div>
     <div class="div-line" style="float: left; width: 100%">
       <el-tabs v-model="activeName" @tab-click="handleClick">
         <el-tab-pane label="Header" name="first">
-          <vueJsonEditor v-model="json" :mode="'code'"></vueJsonEditor>
+          <vueJsonEditor v-model="caseForm.header" :mode="'code'"></vueJsonEditor>
         </el-tab-pane>
         <el-tab-pane label="Params/Body" name="second">
-          <vueJsonEditor v-model="json" :mode="'code'"></vueJsonEditor
+          <vueJsonEditor v-model="caseForm.params_body" :mode="'code'"></vueJsonEditor
         ></el-tab-pane>
       </el-tabs>
     </div>
@@ -95,6 +95,7 @@
 
 <script>
 import vueJsonEditor from "vue-json-editor";
+import CaseApi from "../../request/case";
 
 export default {
   name: "caseDialog",
@@ -105,19 +106,19 @@ export default {
     return {
       methodOptions: [
         {
-          value: "get",
+          value: "GET",
           label: "GET",
         },
         {
-          value: "post",
+          value: "POST",
           label: "POST",
         },
         {
-          value: "put",
+          value: "PUT",
           label: "PUT",
         },
         {
-          value: "delete",
+          value: "DELETE",
           label: "DELETE",
         },
       ],
@@ -134,11 +135,11 @@ export default {
       activeNames: "include",
       caseForm: {
         module_id: 0,
-        url: "",
+        url: "http://httpbin.org/post",
         name: "",
         method: "",
-        header: "",
-        params_type: "params",
+        header: {token: "123"},
+        params_type: "Params",
         params_body: {},
         response: "",
         assert_type: "include",
@@ -155,6 +156,18 @@ export default {
     // json 输入框默认方法
     onJsonChange(value) {
       console.log("value:", value);
+    },
+
+    // 发送
+    async clickSend() {
+      const resp = await CaseApi.debugCase(this.caseForm)
+      if (resp.success === true) {
+        this.$message("获取用例详情成功")
+        console.log("resp---", resp);
+        this.caseForm.response = resp.item.response
+      } else {
+        this.$message("获取用例详情失败")
+      }
     },
   },
 };
