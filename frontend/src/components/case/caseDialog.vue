@@ -118,6 +118,7 @@ import CaseApi from "../../request/case";
 
 export default {
   name: "caseDialog",
+  props: ["mid", "cid"],
   components: {
     vueJsonEditor,
   },
@@ -166,7 +167,33 @@ export default {
       },
     };
   },
+
+  mounted() {
+    console.log("点击了模块mid--->", this.mid);
+    this.caseForm.module_id = this.mid;
+    console.log("点击用例cid--->", this.cid);
+    if (this.cid !== 0) {
+      this.getCaseDetail();
+    }
+  },
+
   methods: {
+    // 获取用例详情
+    async getCaseDetail() {
+      const resp = await CaseApi.detailCase(this.cid);
+      if (resp.success === true) {
+        console.log("resp--->", resp);
+        this.$message.success("用例详情获取成功");
+        this.caseForm = resp.item;
+        const header = resp.item.header.replace(/'/g, '"');
+        const params_body = resp.item.params_body.replace(/'/g, '"');
+        this.caseForm.header = JSON.parse(header);
+        this.caseForm.params_body = JSON.parse(params_body);
+      } else {
+        this.$message.error(resp.error.msg);
+      }
+    },
+
     // tab 页控制
     handleClick(tab, event) {
       console.log(tab, event);
@@ -211,6 +238,7 @@ export default {
       if (resp.success === true) {
         console.log("resp--->", resp);
         this.$message.success("保存用例成功");
+        this.drawer === false;
       } else {
         this.$message.error(resp.error.msg);
       }
@@ -230,8 +258,8 @@ div.jsoneditor-menu {
   background: white;
 }
 div.jsoneditor-outer.has-main-menu-bar {
-  margin-top: 0px;
-  padding-top: 0px;
+  margin-top: 0;
+  padding-top: 0;
 }
 .per-label {
   margin-right: 10px;

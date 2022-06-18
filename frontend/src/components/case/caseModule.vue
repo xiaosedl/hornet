@@ -22,7 +22,7 @@
         type="primary"
         style="margin-left: 16px; float: right"
       >
-        点我打开
+        创建
       </el-button>
     </div>
     <div class="block">
@@ -121,7 +121,11 @@
       size="50%"
     >
       <!--引入用例抽屉子组件-->
-      <caseDialog></caseDialog>
+      <caseDialog
+        v-if="drawer"
+        :mid="currentModule"
+        :cid="currentCase"
+      ></caseDialog>
     </el-drawer>
 
     <!--引入模块弹窗子组件-->
@@ -161,6 +165,8 @@ export default {
       caseData: [],
       drawer: false,
       caseTitle: "",
+      currentModule: 0, // 当前选中的模块
+      currentCase: 0, // 当前选中的用例
     };
   },
 
@@ -247,9 +253,10 @@ export default {
       this.initModuleList(this.projectValue);
     },
 
-    // 点击了节点
+    // 点击了模块节点
     nodeClick(data) {
       console.log("点击了节点", data);
+      this.currentModule = data.id;
       this.initCaseList(data.id);
     },
 
@@ -268,6 +275,7 @@ export default {
     // 点击用例，弹出抽屉，查看用例
     caseRowClick(row) {
       console.log("row", row);
+      this.currentCase = row.id;
       this.drawer = true;
       this.caseTitle = "查看用例";
     },

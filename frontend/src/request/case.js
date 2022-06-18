@@ -13,8 +13,8 @@ class CaseApi {
     return request.post("/api/cases/", data);
   }
 
-  detailCase(data) {
-    return request.post("/api/cases/", data);
+  detailCase(cid) {
+    return request.get("/api/cases/" + cid + "/");
   }
 }
 
