@@ -102,20 +102,11 @@ def case_delete(request, case_id):
 @router.get('/{case_id}/', auth=None)
 def case_detail(request, case_id):
     """
-    获取项目详情
+    获取用例详情
     auth=None，该接口不需要认证
     """
 
     case = get_object_or_404(TestCase, id=case_id)  # django 的获取对象方法，没有返回 404 和 msg，节省捕捉异常逻辑
     if case.is_delete is True:
         return response(error=Error.CASE_IS_DEELEE)
-
-    data = {
-        "id": case.id,
-        "name": case.name,
-        "url": case.url,
-        "method": case.method,
-        "create_time": case.create_time,
-        "update_time": case.update_time
-    }
-    return response(item=data)
+    return response(item=case)
