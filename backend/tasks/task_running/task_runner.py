@@ -17,13 +17,18 @@ def task_runner(task_id):
     """
 
     print("1. 读取任务的测试用例")
-    relevance = TaskCaseRelevance.objects.filter(task_id=task_id)
+    relevance = TaskCaseRelevance.objects.get(task_id=task_id)
+    cases = relevance.case
+    case_ids = []
+    for case in json.loads(cases):
+        case_ids += case["casesId"]
 
     test_cases = {}
-    for rel in relevance:
+    for case_id in case_ids:
         try:
-            case = TestCase.objects.get(pk=rel.case_id, is_delete=False)
-            header_dict = json.loads(case.header)
+            case = TestCase.objects.get(pk=case_id, is_delete=False)
+            header = case.header.replace("\'", "\"")
+            header_dict = json.loads(header)
             params_body = case.params_body.replace("\'", "\"")
             params_body_dict = json.loads(params_body)
             test_cases[case.name] = {
@@ -56,7 +61,7 @@ def task_runner(task_id):
 
 def run(task_id):
     """
-    线程执行
+    线程执行，有线程守护
     """
 
     threads = []

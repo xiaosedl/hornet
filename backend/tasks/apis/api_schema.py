@@ -13,6 +13,16 @@ class TaskIn(Schema):
     cases: list
 
 
+class TaskOut(Schema):
+    """任务入参"""
+
+    id: int
+    name: str
+    describe: str = None
+    status: int
+    update_time: Any
+
+
 class ResultOut(Schema):
     """任务出参"""
 
@@ -24,3 +34,9 @@ class ResultOut(Schema):
     tests: int
     runtime: float
     create_time: datetime
+
+
+class ProjectIn(Schema):
+    """任务所属项目入参"""
+
+    project_id: int

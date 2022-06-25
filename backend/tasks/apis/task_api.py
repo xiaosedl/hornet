@@ -1,15 +1,16 @@
+import json
 from typing import List
 
 from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
-from ninja import Router
+from ninja import Router, Query
 from ninja.pagination import paginate
 
 from backend.common import response, model_to_dict, Error
 from backend.pagination import CustomPagination
 from cases.models import TestCase
 from projects.models import Project
-from tasks.apis.api_schema import TaskIn, ResultOut
+from tasks.apis.api_schema import TaskIn, TaskOut, ResultOut, ProjectIn
 from tasks.models import TestTask, TaskCaseRelevance, TestResult
 from tasks.task_running.task_runner import thread_run
 
@@ -25,30 +26,34 @@ def task_create(request, data: TaskIn):
 
     project = get_object_or_404(Project, pk=data.project)
     task = TestTask.objects.create(project_id=project.id, name=data.name, describe=data.describe)
-    cases = []
-    for case in data.cases:
-        TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
-        case = TestCase.objects.get(pk=case)
-        cases.append({
-            "case": case.id,
-            "module": case.module_id})
+
+    case = json.dumps(data.cases)
+    TaskCaseRelevance.objects.create(task_id=task.id, case=case)
+
+    #
+    # for case in data.cases:
+    #     TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
+    #     case = TestCase.objects.get(pk=case)
+    #     cases.append({
+    #         "case": case.id,
+    #         "module": case.module_id})
     task_dict = model_to_dict(task)
-    task_dict["cases"] = cases
+    task_dict["cases"] = case
 
     return response(item=task_dict)
 
 
-@router.get("/list/{task_id}/", auth=None, response=List[ResultOut])
+@router.get("/list/", auth=None, response=List[TaskOut])
 @paginate(CustomPagination)
-def task_list(request, task_id: int, **kwargs):
+def task_list(request, filters: ProjectIn = Query(...), **kwargs):
     """
     查询任务列表
     auth=None，该接口不需要认证
     """
 
-    task = get_object_or_404(TestTask, pk=task_id)
+    # task = get_object_or_404(TestTask, pk=task_id)
 
-    return TestResult.objects.filter(task=task).all()
+    return TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
 
 
 @router.post("/{task_id}/running/", auth=None)
@@ -80,10 +85,13 @@ def task_detail(request, task_id: int):
     if task.is_delete is True:
         return response(error=Error.TASK_IS_DEELEE)
 
-    relevance = TaskCaseRelevance.objects.filter(task_id=task.id)
-    cases_list = [rel.id for rel in relevance]
+    relevance = TaskCaseRelevance.objects.get(task_id=task.id)
     task_dict = model_to_dict(task)
-    task_dict["cases"] = cases_list
+    task_dict["cases"] = json.loads(relevance.case)
+
+    # cases_list = [rel.id for rel in relevance]
+    # task_dict = model_to_dict(task)
+    # task_dict["cases"] = cases_list
 
     return response(item=task_dict)
 
@@ -102,23 +110,15 @@ def task_update(request, task_id: int, data: TaskIn):
     task = get_object_or_404(TestTask, pk=task_id)
     relvance = get_object_or_404(TaskCaseRelevance, task_id=task_id)
 
-    cases = []
-    for case in data.cases:
-        try:
-            TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
-        except IntegrityError:
-            return response(error=Error.CASE_NOT_EXIST)
-        case = TestCase.objects.get(pk=case)
-        cases.append({
-            "case": case.id,
-            "module": case.module_id})
-
     task.name = data.name
     task.describe = data.describe
     task.save()
-    relvance.delete()
+
+    relvance.case = json.dumps(data.cases)
+    relvance.save()
+
     task_dict = model_to_dict(task)
-    task_dict["cases"] = cases
+    task_dict["cases"] = data.cases
 
     return response(item=task_dict)
 
