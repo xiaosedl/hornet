@@ -16,7 +16,7 @@
         <el-form-item label="任务名称" prop="name">
           <el-input v-model="taskForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="任务描述" prop="describe">
+        <el-form-item label="任务描述">
           <el-input type="textarea" v-model="taskForm.describe"></el-input>
         </el-form-item>
         <el-form-item>
@@ -56,8 +56,8 @@
           <div class="dialog-footer">
             已选择【{{ this.caseNum }}】条用例
             <el-button @click="closeDialog">取消</el-button>
-            <el-button type="primary" @click="submitForm('taskForm')"
-              >确定</el-button
+            <el-button type="primary" @click="submitForm('ruleForm')"
+              >保存</el-button
             >
           </div>
         </el-form-item>
@@ -67,17 +67,18 @@
 </template>
 
 <script>
-import ProjectApi from "../../request/project";
+import TaskApi from "../../request/task";
 import ModuleApi from "../../request/module";
 
 export default {
   name: "taskDialog",
-  props: ["title", "pid"],
+  props: ["title", "pid", "tid"],
   data() {
     return {
       showTitle: "",
       dialogVisible: true,
       taskForm: {
+        project: this.pid,
         name: "",
         describe: "",
         cases: [],
@@ -98,40 +99,54 @@ export default {
       this.showTitle = "创建任务";
     } else if (this.title === "edit") {
       this.showTitle = "编辑任务";
-      this.initProject();
     }
   },
   methods: {
-    // 点击了模块节点
-    nodeClick(data) {
-      console.log("点击了节点", data);
-      this.currentModuleId = data.id;
-      this.getModuleCaseList(data.id)
+    // 关闭弹窗
+    closeDialog() {
+      console.log("closeDialog");
+      // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
+      this.$emit("cancel", {});
     },
 
+    // 点击了模块节点
+    nodeClick(data) {
+      this.currentModuleId = data.id;
+      this.getModuleCaseList(data.id);
+    },
 
     // 查询模块列表，树形结构
     async initModuleList() {
       const req = { project_id: this.pid };
       const resp = await ModuleApi.getModuleTree(req);
-      console.log("getModules--->", resp.items);
       if (resp.success === true) {
         this.moduleData = resp.items;
+        if (this.title === "edit") {
+          await this.getTaskDetail();
+        }
       } else {
         this.$message.error("查询失败");
       }
     },
 
+    // 查看任务详情
+    async getTaskDetail() {
+      const resp = await TaskApi.getTaskDetail(this.tid);
+      if (resp.success === true) {
+        this.taskForm = resp.item;
+        this.calculationCase();
+      } else {
+        this.$message.error(resp.error.mag);
+      }
+    },
+
     // 选择一条用例
-    selectionOneCases(val, row) {
-      console.log("选择一条用例 val--->", val);
-      console.log("选择一条用例 row--->", row);
+    selectionOneCases(val) {
       this.selectiveCase(val);
     },
 
     // 选择所有用例
     selectionAllCases(val) {
-      console.log("val", val);
       this.selectiveCase(val);
     },
 
@@ -145,25 +160,24 @@ export default {
 
     // 初始化用例数据，记住选择过的用例
     async getModuleCaseList(mid) {
-
-      const resp = await ModuleApi.getModuleCases(mid)
+      const resp = await ModuleApi.getModuleCases(mid);
       if (resp.success === true) {
-        this.caseData = resp.items
+        this.caseData = resp.items;
 
         // 已经选择的用例
         this.$nextTick(() => {
-          let casesId = []
+          let casesId = [];
           for (let i = 0; i < this.taskForm.cases.length; i++) {
             if (this.taskForm.cases[i].moduleId === mid) {
-              casesId = this.taskForm.cases[i].casesId
+              casesId = this.taskForm.cases[i].casesId;
             }
           }
 
-          let rows = []
+          let rows = [];
           for (let i = 0; i < casesId.length; i++) {
             for (let j = 0; j < this.caseData.length; j++) {
               if (casesId[i] === this.caseData[j].id) {
-                rows.push(this.caseData[j])
+                rows.push(this.caseData[j]);
               }
             }
           }
@@ -171,9 +185,9 @@ export default {
           rows.forEach((row) => {
             this.$refs.multipleTable.toggleRowSelection(row);
           });
-        })
+        });
       } else {
-        this.$message.error(resp.error.message)
+        this.$message.error(resp.error.message);
       }
     },
 
@@ -183,8 +197,6 @@ export default {
       for (let i = 0; i < multipleSelection.length; i++) {
         moduleCases.push(multipleSelection[i].id);
       }
-
-      console.log("选择的用例--->", moduleCases);
 
       let selective = false;
       for (let i = 0; i < this.taskForm.cases.length; i++) {
@@ -200,32 +212,7 @@ export default {
           casesId: moduleCases,
         });
       }
-      console.log("taskForm case", this.taskForm.cases);
       this.calculationCase();
-    },
-
-    // 关闭弹窗
-    closeDialog() {
-      console.log("closeDialog");
-      // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
-      this.$emit("cancel", {});
-    },
-
-    // 任务编辑弹窗获取任务详情
-    async initProject() {
-      const resp = await ProjectApi.getProject(this.pid);
-      console.log("--->", resp);
-      if (resp.success === true) {
-        this.taskForm = resp.item;
-        this.fileList.push({
-          name: this.taskForm.image,
-          url: "/static/images/" + resp.item.image,
-        });
-        this.$message.success("查询任务详情成功！");
-        console.log("----->", resp.total);
-      } else {
-        this.$message.error("查询任务详情失败");
-      }
     },
 
     // 创建/编辑项目弹窗，请求创建/编辑项目接口
@@ -233,20 +220,16 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.title === "create") {
-            ProjectApi.createProject(this.taskForm).then((resp) => {
-              console.log("createProject", resp);
+            TaskApi.createTask(this.taskForm).then((resp) => {
               if (resp.success === true) {
-                this.$message.success("创建成功！");
                 this.closeDialog();
               } else {
                 this.$message.error(resp.error.msg);
               }
             });
           } else if (this.title === "edit") {
-            ProjectApi.updateProject(this.pid, this.taskForm).then((resp) => {
-              console.log("updateProject", resp);
+            TaskApi.updateTask(this.tid, this.taskForm).then((resp) => {
               if (resp.success === true) {
-                this.$message.success("编辑成功！");
                 this.closeDialog();
               } else {
                 this.$message.error(resp.error.msg);
@@ -254,7 +237,6 @@ export default {
             });
           }
         } else {
-          console.log("error submit!!");
           return false;
         }
       });
@@ -262,9 +244,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-#image {
-  text-align: left;
-}
-</style>
