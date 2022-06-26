@@ -118,7 +118,7 @@ import CaseApi from "../../request/case";
 
 export default {
   name: "caseDialog",
-  props: ["mid", "cid"],
+  props: ["mid", "cid", "drawerFlag"],
   components: {
     vueJsonEditor,
   },
@@ -232,13 +232,14 @@ export default {
     },
 
     // 保存用例
+    // todo 保存用例后关闭抽屉并刷新用例
     async clickSave() {
       console.log("req--->", this.caseForm);
       const resp = await CaseApi.createCase(this.caseForm);
       if (resp.success === true) {
         console.log("resp--->", resp);
         this.$message.success("保存用例成功");
-        this.drawer === false;
+
       } else {
         this.$message.error(resp.error.msg);
       }

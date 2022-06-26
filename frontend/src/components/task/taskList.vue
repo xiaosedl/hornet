@@ -16,7 +16,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
+        <el-form-item style="float: right">
           <el-button type="primary" @click="createTask">创建</el-button>
         </el-form-item>
       </el-form>

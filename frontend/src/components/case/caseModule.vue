@@ -1,29 +1,25 @@
 <template>
   <div class="case">
-    <div style="float: left; line-height: 40px; margin-right: 20px">
-      <strong>项目</strong>
-    </div>
     <div style="text-align: left">
-      <el-select
-        v-model="projectValue"
-        placeholder="请选择"
-        @change="changeProject"
-      >
-        <el-option
-          v-for="item in projectOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        >
-        </el-option>
-      </el-select>
-      <el-button
-        @click="caseCreate"
-        type="primary"
-        style="margin-left: 16px; float: right"
-      >
-        创建
-      </el-button>
+      <el-form :inline="true" class="demo-form-inline">
+        <el-form-item label="项目">
+          <el-select
+            v-model="projectValue"
+            placeholder="选择项目"
+            @change="changeProject"
+          >
+            <el-option
+              v-for="item in projectOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item style="float: right">
+          <el-button type="primary" @click="caseCreate">创建</el-button>
+        </el-form-item>
+      </el-form>
     </div>
     <div class="block">
       <el-card style="width: 28%; margin: 20px 0; float: left">
@@ -125,6 +121,7 @@
         v-if="drawer"
         :mid="currentModule"
         :cid="currentCase"
+        :drawerFlag="drawer"
       ></caseDialog>
     </el-drawer>
 
