@@ -7,6 +7,7 @@ import About from "../views/About";
 import Project from "../components/project/projectList";
 import caseModule from "../components/case/caseModule";
 import taskList from "../components/task/taskList";
+import reportList from "../components/report/reportList";
 
 Vue.use(VueRouter);
 
@@ -62,6 +63,12 @@ const routes = [
         // Home 会被渲染在 Navigation 的 <router-view> 中
         path: "task",
         component: taskList,
+      },
+      {
+        // 当 /main/home 匹配成功，
+        // Home 会被渲染在 Navigation 的 <router-view> 中
+        path: "report",
+        component: reportList,
       },
     ],
   },

@@ -239,7 +239,6 @@ export default {
       if (resp.success === true) {
         console.log("resp--->", resp);
         this.$message.success("保存用例成功");
-
       } else {
         this.$message.error(resp.error.msg);
       }

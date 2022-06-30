@@ -1,5 +1,5 @@
 <template>
-  <div class="project">
+  <div class="task">
     <div style="text-align: left">
       <el-form :inline="true" :model="projectForm" class="demo-form-inline">
         <el-form-item label="项目">
@@ -109,7 +109,7 @@ import taskDialog from "../../components/task/taskDialog.vue";
 import TaskApi from "../../request/task";
 
 export default {
-  name: "Project",
+  name: "Task",
   components: {
     taskDialog,
   },
@@ -131,13 +131,25 @@ export default {
       },
       total: 50,
       taskData: [],
+      taskHeartbeat: null,
     };
   },
 
-  mounted() {
+  created() {
     // 加载 vue 组件同时获取项目列表
     this.initProjectList();
-    this.initTaskList();
+  },
+
+  mounted() {
+    // 任务列表的心跳，5s请求一次
+    this.taskHeartbeat = setInterval(() => {
+      this.initTaskList();
+    }, 5000);
+  },
+
+  destroyed() {
+    // 组件退出时销毁心跳
+    clearInterval(this.taskHeartbeat);
   },
 
   methods: {
