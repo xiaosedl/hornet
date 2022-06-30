@@ -26,6 +26,7 @@ class TaskOut(Schema):
 class ResultOut(Schema):
     """任务出参"""
 
+    id: int
     name: str
     passed: int
     error: int
@@ -33,6 +34,7 @@ class ResultOut(Schema):
     skipped: int
     tests: int
     runtime: float
+    result: str
     create_time: datetime
 
 
