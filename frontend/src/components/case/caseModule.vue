@@ -34,8 +34,9 @@
           :data="moduleData"
           show-checkbox
           node-key="id"
-          default-expand-all
+          :default-expand-all="true"
           :expand-on-click-node="false"
+          :highlight-current="true"
           @node-click="nodeClick"
         >
           <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -107,6 +108,16 @@
         >
         </el-table-column>
       </el-table>
+      <div style="width: 100%; float: right; text-align: right; margin: 10px">
+        <el-pagination
+          @current-change="handleCurrentChange"
+          background
+          layout="prev, pager, next"
+          :page-size="req.size"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
     </div>
 
     <el-drawer
@@ -164,25 +175,29 @@ export default {
       caseTitle: "",
       currentModule: 0, // 当前选中的模块
       currentCase: 0, // 当前选中的用例
+      req: {
+        page: 1,
+        size: 6,
+      },
+      total: 50,
     };
   },
 
   mounted() {
     // 加载 vue 组件同时初始化模块列表
-    this.initProjectList();
+
     this.initModuleList(this.projectValue);
+    this.initProjectList();
   },
 
   methods: {
     // 初始化项目列表
     async initProjectList() {
       const resp = await ProjectApi.getProjects(this.req);
-      console.log("initProjectList--->", resp);
       if (resp.success === true) {
         this.moduleData = resp.items;
         this.projectValue = resp.items[0].id;
         this.projectLabel = resp.items[0].name;
-        // 处理图片访问路径
         for (let i = 0; i < resp.items.length; i++) {
           this.projectOptions.push({
             value: resp.items[i].id,
@@ -196,7 +211,6 @@ export default {
 
     // 修改选中的项目
     changeProject(value) {
-      console.log("changeProject: ", value);
       this.projectValue = value;
       this.projectLabel = this.projectOptions.find(
         (item) => item.value === value
@@ -208,7 +222,6 @@ export default {
     async initModuleList(projectId) {
       const req = { project_id: projectId };
       const resp = await ModuleApi.getModuleTree(req);
-      console.log("getModules--->", resp.items);
       if (resp.success === true) {
         this.moduleData = resp.items;
       } else {
@@ -218,7 +231,6 @@ export default {
 
     // 创建子节点
     append(data) {
-      console.log("新增子模块", data);
       this.dialogFlag = true;
       this.rootFlag = false;
       this.parentObj = data;
@@ -226,7 +238,6 @@ export default {
 
     // 删除节点
     remove(data) {
-      console.log("删除子模块", data);
       ModuleApi.deleteModule(data.id).then((resp) => {
         if (resp.success === true) {
           this.$message.success("删除成功！");
@@ -252,17 +263,16 @@ export default {
 
     // 点击了模块节点
     nodeClick(data) {
-      console.log("点击了节点", data);
       this.currentModule = data.id;
       this.initCaseList(data.id);
     },
 
     // 初始化用例
     async initCaseList(mid) {
-      const resp = await ModuleApi.getModuleCases(mid);
+      const resp = await ModuleApi.getModuleCases(mid, this.req);
       if (resp.success === true) {
-        console.log("case", resp);
         this.caseData = resp.items;
+        this.total = resp.total;
         this.$message.success("查询用例成功");
       } else {
         this.$message.error(resp.error.mag);
@@ -271,7 +281,6 @@ export default {
 
     // 点击用例，弹出抽屉，查看用例
     caseRowClick(row) {
-      console.log("row", row);
       this.currentCase = row.id;
       this.drawer = true;
       this.caseTitle = "查看用例";
@@ -281,6 +290,12 @@ export default {
     caseCreate() {
       this.drawer = true;
       this.caseTitle = "创建用例";
+    },
+
+    // 分页方法，跳转到第几页
+    handleCurrentChange(val) {
+      this.req.page = val;
+      this.initCaseList(this.currentModule, this.req);
     },
   },
 };
