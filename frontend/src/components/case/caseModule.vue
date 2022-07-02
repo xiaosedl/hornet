@@ -263,6 +263,7 @@ export default {
 
     // 点击了模块节点
     nodeClick(data) {
+      this.req.page = 1
       this.currentModule = data.id;
       this.initCaseList(data.id);
     },
