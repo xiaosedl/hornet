@@ -23,7 +23,7 @@
         :data="reportData"
         border
         header-align="center"
-        style="width: 100%;"
+        style="width: 100%"
       >
         <el-table-column prop="id" label="ID" style="width: 5%" align="center">
         </el-table-column>

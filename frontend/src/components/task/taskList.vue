@@ -28,19 +28,10 @@
         header-align="center"
         style="width: 100%; height: 100%; margin: 10px 0"
       >
-        <el-table-column prop="id" label="ID" align="center">
+        <el-table-column prop="id" label="ID" align="center"> </el-table-column>
+        <el-table-column prop="name" label="任务名称" header-align="center">
         </el-table-column>
-        <el-table-column
-          prop="name"
-          label="任务名称"
-          header-align="center"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="describe"
-          label="项目描述"
-          header-align="center"
-        >
+        <el-table-column prop="describe" label="项目描述" header-align="center">
         </el-table-column>
         <el-table-column
           prop="update_time"
