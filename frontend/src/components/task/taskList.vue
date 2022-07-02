@@ -1,5 +1,5 @@
 <template>
-  <div class="task">
+  <div class="task" style="height: 100%">
     <div style="text-align: left">
       <el-form :inline="true" :model="projectForm" class="demo-form-inline">
         <el-form-item label="项目">
@@ -26,32 +26,29 @@
         :data="taskData"
         border
         header-align="center"
-        style="width: 100%; margin: 10px 0"
+        style="width: 100%; height: 100%; margin: 10px 0"
       >
-        <el-table-column prop="id" label="ID" width="60%" align="center">
+        <el-table-column prop="id" label="ID" align="center">
         </el-table-column>
         <el-table-column
           prop="name"
           label="任务名称"
-          width="224%"
           header-align="center"
         >
         </el-table-column>
         <el-table-column
           prop="describe"
           label="项目描述"
-          width="300%"
           header-align="center"
         >
         </el-table-column>
         <el-table-column
           prop="update_time"
           label="更新时间"
-          width="250%"
           header-align="center"
         >
         </el-table-column>
-        <el-table-column prop="status" label="状态" width="150%" align="center">
+        <el-table-column prop="status" label="状态" align="center">
           <template slot-scope="scope">
             <div v-if="scope.row.status === 0">
               <el-tag type="info">未执行</el-tag>
@@ -67,7 +64,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="操作" width="150%" align="center">
+        <el-table-column prop="status" label="操作" align="center">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="runTask(scope.row)"
               >执行</el-button
@@ -228,7 +225,6 @@ export default {
 
     // 删除任务
     async deleteTask(row) {
-      console.log("delete--->", row.id);
       const resp = await TaskApi.deleteTask(row.id);
       if (resp.success === true) {
         this.closeDialog();

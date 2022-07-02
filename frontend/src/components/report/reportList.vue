@@ -23,7 +23,7 @@
         :data="reportData"
         border
         header-align="center"
-        style="width: 100%"
+        style="width: 100%;"
       >
         <el-table-column prop="id" label="ID" style="width: 5%" align="center">
         </el-table-column>
@@ -228,28 +228,6 @@ export default {
       this.req.page = val;
       this.initReportList();
     },
-
-    // // 删除任务
-    // async deleteTask(row) {
-    //   console.log("delete--->", row.id);
-    //   const resp = await TaskApi.deleteTask(row.id);
-    //   if (resp.success === true) {
-    //     this.closeDialog();
-    //   } else {
-    //     this.$message.error("删除失败：" + resp.error.msg);
-    //   }
-    // },
-    //
-    // // 执行任务
-    // async runTask(row) {
-    //   const resp = await TaskApi.runningTask(row.id);
-    //   if (resp.success === true) {
-    //     this.$message.success("开始执行");
-    //     this.closeDialog();
-    //   } else {
-    //     this.$message.error(resp.error.msg);
-    //   }
-    // },
   },
 };
 </script>

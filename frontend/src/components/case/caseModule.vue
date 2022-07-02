@@ -68,7 +68,7 @@
         <el-table-column
           prop="name"
           label="名称"
-          width="180"
+          width="180px"
           header-align="center"
         >
         </el-table-column>

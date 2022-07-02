@@ -4,14 +4,14 @@
       class="el-container"
       style="height: 100%; border: 1px solid #eeeeee"
     >
-      <el-aside width="200px" style="background-color: #1e2531">
-        <div style="margin: 20px">
+      <el-aside width="200px" style="background-color: #1a2847">
+        <div style="margin: 20px 0">
           <img class="logo" src="../assets/logo.svg" alt="logo" />
         </div>
         <el-menu
           default-active="onRoutes"
-          background-color="#1e2531"
-          text-color="#fff"
+          background-color="#1a2847"
+          text-color="#f1f2f6"
           active-text-color="#ffd04b"
         >
           <router-link to="/main/project">
