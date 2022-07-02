@@ -172,10 +172,7 @@ export default {
       let chartDom = document.getElementById("echart");
       const resp = await ReportApi.getReportDetail(this.rid);
       if (resp.success === true) {
-        console.log("resp--->", resp.item);
-        console.log(this.chartOption.series[0].data);
         this.reportData.push(resp.item);
-        console.log("reportData", this.reportData);
         this.chartOption.series[0].data.push({
           value: resp.item.passed,
           name: "通过",
@@ -201,7 +198,6 @@ export default {
 
     // 关闭弹窗
     closeDialog() {
-      console.log("closeDialog");
       // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
       this.$emit("cancel", {});
     },

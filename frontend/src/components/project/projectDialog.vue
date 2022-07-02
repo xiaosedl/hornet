@@ -68,7 +68,7 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: "请输入活动名称", trigger: "blur" },
+          { required: true, message: "请输入项目名称", trigger: "blur" },
           {
             min: 1,
             max: 50,
@@ -76,10 +76,11 @@ export default {
             trigger: "blur",
           },
         ],
-        desc: [{ required: false, message: "请填写活动形式", trigger: "blur" }],
+        desc: [{ required: false, message: "请填写项目描述", trigger: "blur" }],
       },
     };
   },
+
   mounted() {
     if (this.title === "create") {
       this.showTitle = "创建项目";
@@ -88,10 +89,10 @@ export default {
       this.initProject();
     }
   },
+
   methods: {
     // 关闭弹窗
     closeDialog() {
-      console.log("closeDialog");
       // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
       this.$emit("cancel", {});
     },
@@ -99,7 +100,6 @@ export default {
     // 项目编辑弹窗获取项目详情
     async initProject() {
       const resp = await ProjectApi.getProject(this.pid);
-      console.log("--->", resp);
       if (resp.success === true) {
         this.projectForm = resp.item;
         this.fileList.push({
@@ -107,7 +107,6 @@ export default {
           url: "/static/images/" + resp.item.image,
         });
         this.$message.success("查询项目详情成功！");
-        console.log("----->", resp.total);
       } else {
         this.$message.error("查询项目详情失败");
       }
@@ -119,7 +118,6 @@ export default {
         if (valid) {
           if (this.title === "create") {
             ProjectApi.createProject(this.projectForm).then((resp) => {
-              console.log("createProject", resp);
               if (resp.success === true) {
                 this.$message.success("创建成功！");
                 this.closeDialog();
@@ -130,7 +128,6 @@ export default {
           } else if (this.title === "edit") {
             ProjectApi.updateProject(this.pid, this.projectForm).then(
               (resp) => {
-                console.log("updateProject", resp);
                 if (resp.success === true) {
                   this.$message.success("编辑成功！");
                   this.closeDialog();
@@ -141,7 +138,7 @@ export default {
             );
           }
         } else {
-          console.log("error submit!!");
+          this.$message.error("保存失败");
           return false;
         }
       });
@@ -149,40 +146,31 @@ export default {
 
     // 删除图片
     handleRemove(file) {
-      console.log("删除图片", file);
       this.fileList.remove(file);
     },
 
     // 预览图片
-    handlePreview(file, fileList) {
-      console.log("上传成功", file, fileList);
+    handlePreview(file) {
       this.imageUrl = file.url;
       this.imageVisible = true;
     },
 
     // 上传图片
     beforeUpload(file) {
-      console.log("file", file);
-
       let fd = new FormData();
       fd.append("file", file);
 
       ProjectApi.uploadImage(fd).then((resp) => {
-        console.log("resp--->", resp.data);
         if (resp.data.success === true) {
           this.projectForm.image = resp.data.item;
-          console.log("projectForm", this.projectForm);
           const imagePath = "/static/images/" + resp.data.item;
-          console.log("imagePath--->", imagePath);
 
           this.fileList.push({
             name: file.name,
             url: imagePath,
           });
-          console.log("fileList", this.fileList);
           this.$message.success("上传成功");
         } else {
-          console.log("上传失败", resp);
           this.$message.error(resp.data.error.message);
         }
       });

@@ -37,7 +37,7 @@
       <el-radio v-model="caseForm.params_type" label="Json">JSON</el-radio>
     </div>
     <div class="div-line" style="float: left; width: 100%">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane label="Header" name="first">
           <vueJsonEditor
             v-model="caseForm.header"
@@ -169,9 +169,7 @@ export default {
   },
 
   mounted() {
-    console.log("点击了模块mid--->", this.mid);
     this.caseForm.module_id = this.mid;
-    console.log("点击用例cid--->", this.cid);
     if (this.cid !== 0) {
       this.getCaseDetail();
     }
@@ -182,7 +180,6 @@ export default {
     async getCaseDetail() {
       const resp = await CaseApi.detailCase(this.cid);
       if (resp.success === true) {
-        console.log("resp--->", resp);
         this.$message.success("用例详情获取成功");
         this.caseForm = resp.item;
         const header = resp.item.header.replace(/'/g, '"');
@@ -194,22 +191,11 @@ export default {
       }
     },
 
-    // tab 页控制
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-
-    // json 输入框默认方法
-    onJsonChange(value) {
-      console.log("value:", value);
-    },
-
     // 发送
     async clickSend() {
       const resp = await CaseApi.debugCase(this.caseForm);
       if (resp.success === true) {
         this.$message.success("请求成功");
-        console.log("resp---", resp);
         this.caseForm.response = resp.item.response;
       } else {
         this.$message.error(resp.error.msg);
@@ -234,11 +220,10 @@ export default {
     // 保存用例
     // todo 保存用例后关闭抽屉并刷新用例
     async clickSave() {
-      console.log("req--->", this.caseForm);
       const resp = await CaseApi.createCase(this.caseForm);
       if (resp.success === true) {
-        console.log("resp--->", resp);
         this.$message.success("保存用例成功");
+        this.drawerFlag = false;
       } else {
         this.$message.error(resp.error.msg);
       }

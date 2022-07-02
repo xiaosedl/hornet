@@ -5,8 +5,8 @@ class ModuleApi {
     return request.get("/api/modules/tree", data);
   }
 
-  getModuleCases(mid) {
-    return request.get("/api/modules/" + mid + "/cases/");
+  getModuleCases(mid, data) {
+    return request.get("/api/modules/" + mid + "/cases/", data);
   }
 
   createModule(data) {

@@ -203,7 +203,6 @@ export default {
       };
       const resp = await ReportApi.getReports(req);
       if (resp.success === true) {
-        console.log("report", resp);
         this.reportData = resp.items;
         this.total = resp.total;
       } else {

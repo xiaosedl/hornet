@@ -73,7 +73,6 @@ export default {
   methods: {
     // 关闭弹窗
     closeDialog() {
-      console.log("closeDialog");
       // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
       this.$emit("cancel", {});
     },
@@ -83,7 +82,6 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           ModuleApi.createModule(this.moduleForm).then((resp) => {
-            console.log("createProject", resp);
             if (resp.success === true) {
               this.$message.success("创建成功！");
               this.closeDialog();
@@ -92,7 +90,6 @@ export default {
             }
           });
         } else {
-          console.log("error submit!!");
           return false;
         }
       });

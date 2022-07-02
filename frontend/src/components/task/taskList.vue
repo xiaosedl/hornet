@@ -183,7 +183,6 @@ export default {
       };
       const resp = await TaskApi.getTasks(req);
       if (resp.success === true) {
-        console.log("tasks", resp);
         this.taskData = resp.items;
         this.total = resp.total;
       } else {

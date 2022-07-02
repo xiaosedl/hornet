@@ -104,17 +104,14 @@ export default {
     // 初始化项目列表
     async initProjectList() {
       const resp = await ProjectApi.getProjects(this.req);
-      console.log("--->", resp);
       if (resp.success === true) {
         // 处理图片访问路径
         for (let i = 0; i < resp.items.length; i++) {
           resp.items[i].image = "/static/images/" + resp.items[i].image;
         }
-
         this.projectData = resp.items;
         this.total = resp.total;
         this.$message.success("查询成功！");
-        console.log("----->", resp.total);
       } else {
         this.$message.error("查询失败");
       }
@@ -134,7 +131,6 @@ export default {
 
     // 分页方法，跳转到第几页
     handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
       this.req.page = val;
       this.initProjectList();
     },
@@ -148,9 +144,7 @@ export default {
 
     // 删除项目
     deleteProject(id) {
-      console.log("delete", id);
       ProjectApi.deleteProject(id).then((resp) => {
-        console.log("deleteProject", resp);
         if (resp.success === true) {
           this.$message.success("删除成功！");
           this.closeDialog();

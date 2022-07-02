@@ -104,7 +104,6 @@ export default {
   methods: {
     // 关闭弹窗
     closeDialog() {
-      console.log("closeDialog");
       // 关闭弹窗，子组件回调给父组件，在父组件中引入子组件的地方绑定 cancel 事件 @cancel="xxx"
       this.$emit("cancel", {});
     },
