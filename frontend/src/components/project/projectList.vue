@@ -1,7 +1,7 @@
 <template>
   <div class="project">
     <div style="text-align: left">
-      <el-button type="primary" style="height: 50px" @click="showDialog"
+      <el-button type="primary" style="height: 50px" @click="showDialog" cy-data="ProjectCreate"
         >创建</el-button
       >
     </div>
@@ -13,16 +13,16 @@
             <div style="float: right">
               <el-dropdown>
                 <span class="el-dropdown-link">
-                  <i class="el-icon-setting"></i>
+                  <i class="el-icon-setting" cy-data="ProjectSetting"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="edit">
-                    <el-button type="text" @click="showEdit(item.id)"
+                    <el-button type="text" @click="showEdit(item.id)" cy-data="ProjectEdit"
                       >编辑</el-button
                     >
                   </el-dropdown-item>
                   <el-dropdown-item command="delete">
-                    <el-button type="text" @click="deleteProject(item.id)"
+                    <el-button type="text" @click="deleteProject(item.id)" cy-data="ProjectDelete"
                       >删除</el-button
                     >
                   </el-dropdown-item>
@@ -45,6 +45,7 @@
     </div>
     <div style="width: 100%; float: right; text-align: right; margin: 10px">
       <el-pagination
+        cy-data="ProjectPage"
         @current-change="handleCurrentChange"
         background
         layout="prev, pager, next"
@@ -65,7 +66,7 @@
 
 <style>
 .project-card {
-  float: right;
+  float: left;
   width: 31%;
   height: 40%;
   margin: 10px;

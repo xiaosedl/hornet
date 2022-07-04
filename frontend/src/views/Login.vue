@@ -18,12 +18,13 @@
                 class="demo-ruleForm"
               >
                 <el-form-item label="用户名" prop="username">
-                  <el-input v-model="loginForm.username"></el-input>
+                  <el-input v-model="loginForm.username" cy-data="LoginUsername"></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                   <el-input
                     v-model="loginForm.password"
                     type="password"
+                    cy-data="LoginPassword"
                   ></el-input>
                 </el-form-item>
                 <el-form-item>
@@ -31,6 +32,7 @@
                     style="width: 258px"
                     type="primary"
                     @click="submitLogin('loginForm')"
+                    cy-data="LoginSubmit"
                     >登录</el-button
                   >
                 </el-form-item>

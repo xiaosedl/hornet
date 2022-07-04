@@ -50,7 +50,7 @@
               <el-dropdown-item>删除</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>欢迎～{{ user }}</span>
+          <span cy-data="LoginSuccess">欢迎～{{ user }}</span>
         </el-header>
         <el-main class="el-main">
           <el-card>

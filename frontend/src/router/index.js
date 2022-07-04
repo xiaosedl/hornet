@@ -81,19 +81,19 @@ const router = new VueRouter({
 });
 
 // 导航守卫，控制一些页面登录才能访问
-router.beforeEach((to, from, next) => {
-  if (to.path === "/login") {
-    // 当路由为 Login 时就直接下一步动作
-    next();
-  } else {
-    // 否则就需要判断
-    if (sessionStorage.token) {
-      // 如果有用户名就进行下一步 sessionStorage 浏览器提供的缓存
-      next();
-    } else {
-      next({ path: "/login" }); // 没有用户名就跳转到 login 页面
-    }
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   if (to.path === "/login") {
+//     // 当路由为 Login 时就直接下一步动作
+//     next();
+//   } else {
+//     // 否则就需要判断
+//     if (sessionStorage.token) {
+//       // 如果有用户名就进行下一步 sessionStorage 浏览器提供的缓存
+//       next();
+//     } else {
+//       next({ path: "/login" }); // 没有用户名就跳转到 login 页面
+//     }
+//   }
+// });
 
 export default router;
