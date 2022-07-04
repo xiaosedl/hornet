@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="TaskTest-20220627001008" tests="4" file=".py" time="2.272" timestamp="2022-06-27T00:10:10" failures="0" errors="0" skipped="0">
+		<testcase classname="TaskTest" name="test_case_task_00001_test_case1" time="0.584" timestamp="2022-06-27T00:10:09" file="tasks/task_running/test_case.py" line="17">
+			<!--test_case_task_00001_test_case1-->
+		</testcase>
+		<testcase classname="TaskTest" name="test_case_task_00002_test_case2" time="0.560" timestamp="2022-06-27T00:10:09" file="tasks/task_running/test_case.py" line="17">
+			<!--test_case_task_00002_test_case2-->
+		</testcase>
+		<testcase classname="TaskTest" name="test_case_task_00003_用例保存01" time="0.513" timestamp="2022-06-27T00:10:10" file="tasks/task_running/test_case.py" line="17">
+			<!--test_case_task_00003_用例保存01-->
+		</testcase>
+		<testcase classname="TaskTest" name="test_case_task_00004_根节点1___测试用例02" time="0.614" timestamp="2022-06-27T00:10:10" file="tasks/task_running/test_case.py" line="17">
+			<!--test_case_task_00004_根节点1___测试用例02-->
+		</testcase>
+	</testsuite>
+</testsuites>

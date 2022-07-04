@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+	<testsuite name="MyTest-20220502151620" tests="2" file=".py" time="0.009" timestamp="2022-05-02T15:16:20" failures="1" errors="0" skipped="0">
+		<testcase classname="MyTest" name="test_api1_2__1__1__2_" time="0.001" timestamp="2022-05-02T15:16:20" file="test_case_demo.py" line="9"/>
+		<testcase classname="MyTest" name="test_api1_1__1__2__2_" time="0.009" timestamp="2022-05-02T15:16:20" file="test_case_demo.py" line="9">
+			<failure type="AssertionError" message="3 != 2"><![CDATA[Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.9/lib/python3.9/site-packages/ddt.py", line 182, in wrapper
+    return func(self, *args, **kwargs)
+  File "/Users/wewend/Material/GitHub/hornet/backend/case_running_demo/test_case_demo.py", line 14, in test_api1
+    self.assertEqual(a + b, c)
+AssertionError: 3 != 2
+]]></failure>
+		</testcase>
+	</testsuite>
+</testsuites>

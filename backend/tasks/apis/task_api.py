@@ -1,17 +1,15 @@
 import json
 from typing import List
 
-from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from ninja import Router, Query
 from ninja.pagination import paginate
 
 from backend.common import response, model_to_dict, Error
 from backend.pagination import CustomPagination
-from cases.models import TestCase
 from projects.models import Project
-from tasks.apis.api_schema import TaskIn, TaskOut, ResultOut, ProjectIn
-from tasks.models import TestTask, TaskCaseRelevance, TestResult
+from tasks.apis.api_schema import TaskIn, TaskOut, ProjectIn
+from tasks.models import TestTask, TaskCaseRelevance
 from tasks.task_running.task_runner import thread_run
 
 router = Router()  # 实例化 project 的路由 Router
@@ -29,14 +27,6 @@ def task_create(request, data: TaskIn):
 
     case = json.dumps(data.cases)
     TaskCaseRelevance.objects.create(task_id=task.id, case=case)
-
-    #
-    # for case in data.cases:
-    #     TaskCaseRelevance.objects.create(task_id=task.id, case_id=case)
-    #     case = TestCase.objects.get(pk=case)
-    #     cases.append({
-    #         "case": case.id,
-    #         "module": case.module_id})
     task_dict = model_to_dict(task)
     task_dict["cases"] = case
 
@@ -50,8 +40,6 @@ def task_list(request, filters: ProjectIn = Query(...), **kwargs):
     查询任务列表
     auth=None，该接口不需要认证
     """
-
-    # task = get_object_or_404(TestTask, pk=task_id)
 
     return TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
 
@@ -88,10 +76,6 @@ def task_detail(request, task_id: int):
     relevance = TaskCaseRelevance.objects.get(task_id=task.id)
     task_dict = model_to_dict(task)
     task_dict["cases"] = json.loads(relevance.case)
-
-    # cases_list = [rel.id for rel in relevance]
-    # task_dict = model_to_dict(task)
-    # task_dict["cases"] = cases_list
 
     return response(item=task_dict)
 
