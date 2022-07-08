@@ -31,6 +31,7 @@ class Error:
     CASE_IS_DEELEE = {"10053": "测试用例已经被删除"}
     CASE_REQEUST_ERROR = {"10054": "请求方法和类型不符：[GET]-[Param]，[POST/PUT]-[Form/Json]"}
     ASSERT_TYPE_ERROR = {"10055": "断言类型错误"}
+    CASE_EXTRACT_ERROR = {"10056": "提取器错误"}
 
     TASK_IS_NULL = {"10060": "任务查询结果为空"}
     TASK_NAME_EXIST = {"10061": "任务名称已存在"}

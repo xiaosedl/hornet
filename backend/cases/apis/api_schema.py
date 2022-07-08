@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 from ninja import Schema
 from enum import Enum
@@ -54,6 +54,7 @@ class CaseIn(Schema):
     response: str
     assert_type: str
     assert_text: str
+    extract_list: list = None
 
 
 class CaseDebugIn(Schema):
@@ -91,3 +92,10 @@ class CaseOut(Schema):
     module: ModuleSchema = None
     create_time: Any
     update_time: Any
+
+
+class ExtractIn(Schema):
+    """提取器入参"""
+
+    response: str
+    extract_list: list

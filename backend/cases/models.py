@@ -40,3 +40,21 @@ class TestCase(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class TestExtract(models.Model):
+    """
+    提取器表
+    """
+
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)  # 关联 project id
+    case_id = models.IntegerField("用例 id", null=False, default=0)  # 关联 case id
+    name = models.CharField("名称", max_length=1000, null=False)
+    extract = models.CharField("提取规则", max_length=1000, null=False)
+    value = models.CharField("提取值", max_length=1000, null=True, blank=True, default="{}")
+    is_delete = models.BooleanField("删除", default=False)
+    update_time = models.DateTimeField("更新时间", auto_now=True)
+    create_time = models.DateTimeField("创建时间", auto_now_add=True)
+
+    def __str__(self):
+        return self.name
