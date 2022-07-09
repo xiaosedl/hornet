@@ -18,7 +18,10 @@
                 class="demo-ruleForm"
               >
                 <el-form-item label="用户名" prop="username">
-                  <el-input v-model="loginForm.username" cy-data="LoginUsername"></el-input>
+                  <el-input
+                    v-model="loginForm.username"
+                    cy-data="LoginUsername"
+                  ></el-input>
                 </el-form-item>
                 <el-form-item label="密码" prop="password">
                   <el-input

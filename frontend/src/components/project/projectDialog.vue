@@ -16,7 +16,11 @@
         <el-input v-model="projectForm.name" cy-data="ProjectName"></el-input>
       </el-form-item>
       <el-form-item label="项目描述" prop="describe">
-        <el-input type="textarea" v-model="projectForm.describe" cy-data="ProjectDescribe"></el-input>
+        <el-input
+          type="textarea"
+          v-model="projectForm.describe"
+          cy-data="ProjectDescribe"
+        ></el-input>
       </el-form-item>
       <el-form-item label="图片" prop="desc">
         <div id="image">
@@ -37,7 +41,10 @@
       </el-form-item>
       <el-form-item style="text-align: right">
         <el-button @click="closeDialog">取消</el-button>
-        <el-button type="primary" @click="submitForm('projectForm')" cy-data="ProjectSubmit"
+        <el-button
+          type="primary"
+          @click="submitForm('projectForm')"
+          cy-data="ProjectSubmit"
           >确定</el-button
         >
       </el-form-item>

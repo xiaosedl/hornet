@@ -1,7 +1,11 @@
 <template>
   <div class="project">
     <div style="text-align: left">
-      <el-button type="primary" style="height: 50px" @click="showDialog" cy-data="ProjectCreate"
+      <el-button
+        type="primary"
+        style="height: 50px"
+        @click="showDialog"
+        cy-data="ProjectCreate"
         >创建</el-button
       >
     </div>
@@ -17,12 +21,18 @@
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item command="edit">
-                    <el-button type="text" @click="showEdit(item.id)" cy-data="ProjectEdit"
+                    <el-button
+                      type="text"
+                      @click="showEdit(item.id)"
+                      cy-data="ProjectEdit"
                       >编辑</el-button
                     >
                   </el-dropdown-item>
                   <el-dropdown-item command="delete">
-                    <el-button type="text" @click="deleteProject(item.id)" cy-data="ProjectDelete"
+                    <el-button
+                      type="text"
+                      @click="deleteProject(item.id)"
+                      cy-data="ProjectDelete"
                       >删除</el-button
                     >
                   </el-dropdown-item>
