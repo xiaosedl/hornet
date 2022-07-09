@@ -92,6 +92,45 @@
             </el-input>
           </div>
         </el-collapse-item>
+        <el-collapse-item title="提取器" name="2">
+          <el-form>
+            <div v-for="(item, index) in extractList" :key="index">
+              <el-form-item label="提取">
+                <el-col :span="7">
+                  <el-input
+                    v-model="item.name"
+                    placeholder="变量"
+                    style="width: 100%"
+                  ></el-input>
+                </el-col>
+                <el-col :span="12">
+                  <el-input
+                    v-model="item.extract"
+                    placeholder="提取规则"
+                    style="width: 100%"
+                  ></el-input>
+                </el-col>
+              </el-form-item>
+            </div>
+          </el-form>
+          <div class="div-line" style="float: left; margin: 10px 0">
+            <el-button
+              style="float: left"
+              type="success"
+              size="small"
+              @click="addExtract"
+              icon="el-icon-plus"
+              >添加</el-button
+            >
+            <el-button
+              style="float: left"
+              type="primary"
+              size="small"
+              @click="checkExtract"
+              >检查</el-button
+            >
+          </div>
+        </el-collapse-item>
       </el-collapse>
     </div>
     <div class="div-line" style="float: left; width: 100%; margin: 10px 0">
@@ -118,7 +157,7 @@ import CaseApi from "../../request/case";
 
 export default {
   name: "caseDialog",
-  props: ["mid", "cid", "drawerFlag"],
+  props: ["mid", "cid", "drawerFlag", "caseTitle"],
   components: {
     vueJsonEditor,
   },
@@ -157,14 +196,16 @@ export default {
         module_id: 0,
         url: "http://httpbin.org/post",
         name: "",
-        method: "",
+        method: "POST",
         header: { token: "123" },
-        params_type: "Params",
+        params_type: "Json",
         params_body: {},
         response: "",
         assert_type: "include",
         assert_text: "",
+        extract_list: [],
       },
+      extractList: [],
     };
   },
 
@@ -182,6 +223,8 @@ export default {
       if (resp.success === true) {
         this.$message.success("用例详情获取成功");
         this.caseForm = resp.item;
+        this.caseForm.module_id = resp.item.module;
+        this.extractList = resp.item.extract_list;
         const header = resp.item.header.replace(/'/g, '"');
         const params_body = resp.item.params_body.replace(/'/g, '"');
         this.caseForm.header = JSON.parse(header);
@@ -218,12 +261,45 @@ export default {
     },
 
     // 保存用例
-    // todo 保存用例后关闭抽屉并刷新用例
     async clickSave() {
-      const resp = await CaseApi.createCase(this.caseForm);
+      this.caseForm.extract_list = this.extractList;
+      if (this.cid === 0) {
+        const resp = await CaseApi.createCase(this.caseForm);
+        if (resp.success === true) {
+          this.$message.success("保存用例成功");
+          this.drawerFlag = false;
+        } else {
+          this.$message.error(resp.error.msg);
+        }
+      } else {
+        const resp = await CaseApi.updateCase(this.cid, this.caseForm);
+        if (resp.success === true) {
+          this.$message.success("保存用例成功");
+          this.drawerFlag = false;
+        } else {
+          this.$message.error(resp.error.msg);
+        }
+      }
+    },
+
+    // 增加提取器
+    addExtract() {
+      this.extractList.push({ name: "", extract: "" });
+    },
+
+    // 检查提取器
+    async checkExtract() {
+      if (this.extractList.length === 0) {
+        this.$message.error("请添加提取器");
+        return;
+      }
+      const req = {
+        response: this.caseForm.response,
+        extract_list: this.extractList,
+      };
+      const resp = await CaseApi.checkExtract(req);
       if (resp.success === true) {
-        this.$message.success("保存用例成功");
-        this.drawerFlag = false;
+        this.$message.success("检查成功");
       } else {
         this.$message.error(resp.error.msg);
       }
