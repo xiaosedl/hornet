@@ -196,7 +196,6 @@ export default {
     async initProjectList() {
       const resp = await ProjectApi.getProjects(this.req);
       if (resp.success === true) {
-        this.moduleData = resp.items;
         this.projectValue = resp.items[0].id;
         this.projectLabel = resp.items[0].name;
         for (let i = 0; i < resp.items.length; i++) {

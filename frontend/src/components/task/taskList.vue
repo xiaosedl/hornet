@@ -126,6 +126,7 @@ export default {
   created() {
     // 加载 vue 组件同时获取项目列表
     this.initProjectList();
+    this.initTaskList();
   },
 
   mounted() {

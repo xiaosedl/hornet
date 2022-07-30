@@ -296,6 +296,8 @@ export default {
       const req = {
         response: this.caseForm.response,
         extract_list: this.extractList,
+        module_id: this.mid,
+        case_id: this.cid
       };
       const resp = await CaseApi.checkExtract(req);
       if (resp.success === true) {

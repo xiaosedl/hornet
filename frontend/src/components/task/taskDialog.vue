@@ -50,6 +50,16 @@
                 ></el-table-column>
               </el-table>
             </div>
+            <div style="width: 100%; float: right; text-align: right; margin: 10px">
+              <el-pagination
+                @current-change="handleCurrentChange"
+                background
+                layout="prev, pager, next"
+                :page-size="req.size"
+                :total="total"
+              >
+              </el-pagination>
+            </div>
           </div>
         </el-form-item>
         <el-form-item style="text-align: right">
@@ -90,6 +100,11 @@ export default {
       caseData: [],
       currentModuleId: 0,
       caseNum: 0,
+      req: {
+        page: 1,
+        size: 6,
+      },
+      total: 50,
     };
   },
   mounted() {
@@ -110,6 +125,7 @@ export default {
 
     // 点击了模块节点
     nodeClick(data) {
+      this.req.page = 1;
       this.currentModuleId = data.id;
       this.getModuleCaseList(data.id);
     },
@@ -135,7 +151,7 @@ export default {
         this.taskForm = resp.item;
         this.calculationCase();
       } else {
-        this.$message.error(resp.error.mag);
+        this.$message.error(resp.error.msg);
       }
     },
 
@@ -159,9 +175,10 @@ export default {
 
     // 初始化用例数据，记住选择过的用例
     async getModuleCaseList(mid) {
-      const resp = await ModuleApi.getModuleCases(mid);
+      const resp = await ModuleApi.getModuleCases(mid, this.req);
       if (resp.success === true) {
         this.caseData = resp.items;
+        this.total = resp.total;
 
         // 已经选择的用例
         this.$nextTick(() => {
@@ -239,6 +256,24 @@ export default {
           return false;
         }
       });
+    },
+
+    // 初始化用例
+    async initCaseList(mid) {
+      const resp = await ModuleApi.getModuleCases(mid, this.req);
+      if (resp.success === true) {
+        this.caseData = resp.items;
+        this.total = resp.total;
+        this.$message.success("查询用例成功");
+      } else {
+        this.$message.error(resp.error.mag);
+      }
+    },
+
+    // 分页方法，跳转到第几页
+    handleCurrentChange(val) {
+      this.req.page = val;
+      this.getModuleCaseList(this.currentModuleId);
     },
   },
 };
