@@ -99,3 +99,5 @@ class ExtractIn(Schema):
 
     response: str
     extract_list: list
+    module_id: int
+    case_id: int

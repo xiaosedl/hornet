@@ -28,8 +28,8 @@ class Error:
     CASE_IS_NULL = {"10050": "测试用例查询结果为空"}
     CASE_NAME_EXIST = {"10051": "测试用例名称已存在"}
     CASE_NOT_EXIST = {"10052": "测试用例存在"}
-    CASE_IS_DEELEE = {"10053": "测试用例已经被删除"}
-    CASE_REQEUST_ERROR = {"10054": "请求方法和类型不符：[GET]-[Param]，[POST/PUT]-[Form/Json]"}
+    CASE_IS_DELETE = {"10053": "测试用例已经被删除"}
+    CASE_REQUEST_ERROR = {"10054": "请求方法和类型不符：[GET]-[Param]，[POST/PUT]-[Form/Json]"}
     ASSERT_TYPE_ERROR = {"10055": "断言类型错误"}
     CASE_EXTRACT_ERROR = {"10056": "提取器错误"}
 
@@ -92,7 +92,7 @@ def response(success: bool = True, error: dict = None, item=None) -> dict:
 
 def node_tree(nodes, current_node):
     """
-    递归：获取 curent_node 的所有子节点
+    递归：获取 current_node 的所有子节点
     """
 
     for node in nodes:
@@ -102,12 +102,12 @@ def node_tree(nodes, current_node):
     return current_node
 
 
-def children_node(nodes, cureent_node):
+def children_node(nodes, current_node):
     """
     判断当前有没有子节点
     """
 
     for node in nodes:
-        if node["parent_id"] == cureent_node["id"]:
+        if node["parent_id"] == current_node["id"]:
             return True
     return False

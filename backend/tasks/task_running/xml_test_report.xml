@@ -1,17 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testsuites>
-	<testsuite name="TaskTest-20220627001008" tests="4" file=".py" time="2.272" timestamp="2022-06-27T00:10:10" failures="0" errors="0" skipped="0">
-		<testcase classname="TaskTest" name="test_case_task_00001_test_case1" time="0.584" timestamp="2022-06-27T00:10:09" file="tasks/task_running/test_case.py" line="17">
-			<!--test_case_task_00001_test_case1-->
+	<testsuite name="TaskTest-20220730153020" tests="3" file=".py" time="4.263" timestamp="2022-07-30T15:30:24" failures="0" errors="0" skipped="0">
+		<testcase classname="TaskTest" name="test_case_api_00001_场景测试用例01" time="1.542" timestamp="2022-07-30T15:30:21" file="tasks/task_running/test_case.py" line="24">
+			<doc><![CDATA[test_case_api_00001_场景测试用例01]]></doc>
+			<system-out><![CDATA[replace_list: []
+replace_list: []
+select name, extract from cases_testextract where case_id='28'
+[('sign', 'headers.Sign'), ('host', 'headers.Host')]
+extracts:  ('sign', 'headers.Sign')
+resp_json:  {'args': {}, 'data': '{}', 'files': {}, 'form': {}, 'headers': {'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Content-Length': '2', 'Content-Type': 'application/json', 'Host': 'httpbin.org', 'Sign': 'abc123', 'User-Agent': 'python-requests/2.26.0', 'X-Amzn-Trace-Id': 'Root=1-62e54e8d-0c1dd191785760ce62b895bd'}, 'json': {}, 'origin': '14.221.173.225', 'url': 'http://httpbin.org/post'}
+update cases_testextract set value='abc123' where case_id='28' and name='sign'
+update cases_testextract set value='httpbin.org' where case_id='28' and name='host'
+]]></system-out>
 		</testcase>
-		<testcase classname="TaskTest" name="test_case_task_00002_test_case2" time="0.560" timestamp="2022-06-27T00:10:09" file="tasks/task_running/test_case.py" line="17">
-			<!--test_case_task_00002_test_case2-->
+		<testcase classname="TaskTest" name="test_case_api_00002_场景测试用例02" time="2.169" timestamp="2022-07-30T15:30:23" file="tasks/task_running/test_case.py" line="24">
+			<doc><![CDATA[test_case_api_00002_场景测试用例02]]></doc>
+			<system-out><![CDATA[replace_list: ['${host}']
+name: host
+select value from cases_testextract where name='host'
+('httpbin.org',)
+new: http://httpbin.org/post
+replace_list: ['${sign}']
+name: sign
+select value from cases_testextract where name='sign'
+('abc123',)
+new: abc123
+replace_list: []
+replace_list: []
+select name, extract from cases_testextract where case_id='29'
+[('tom', 'json.name')]
+extracts:  ('tom', 'json.name')
+resp_json:  {'args': {}, 'data': '{"name": "tom", "age": "18"}', 'files': {}, 'form': {}, 'headers': {'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Content-Length': '28', 'Content-Type': 'application/json', 'Host': 'httpbin.org', 'Sign': 'abc123', 'User-Agent': 'python-requests/2.26.0', 'X-Amzn-Trace-Id': 'Root=1-62e54e8e-23063aa51a932aee2a063b59'}, 'json': {'age': '18', 'name': 'tom'}, 'origin': '116.4.118.86', 'url': 'http://httpbin.org/post'}
+update cases_testextract set value='tom' where case_id='29' and name='tom'
+]]></system-out>
 		</testcase>
-		<testcase classname="TaskTest" name="test_case_task_00003_用例保存01" time="0.513" timestamp="2022-06-27T00:10:10" file="tasks/task_running/test_case.py" line="17">
-			<!--test_case_task_00003_用例保存01-->
-		</testcase>
-		<testcase classname="TaskTest" name="test_case_task_00004_根节点1___测试用例02" time="0.614" timestamp="2022-06-27T00:10:10" file="tasks/task_running/test_case.py" line="17">
-			<!--test_case_task_00004_根节点1___测试用例02-->
+		<testcase classname="TaskTest" name="test_case_api_00003_场景测试用例03" time="0.552" timestamp="2022-07-30T15:30:24" file="tasks/task_running/test_case.py" line="24">
+			<doc><![CDATA[test_case_api_00003_场景测试用例03]]></doc>
+			<system-out><![CDATA[replace_list: ['${host}']
+name: host
+select value from cases_testextract where name='host'
+('httpbin.org',)
+new: http://httpbin.org/post
+replace_list: ['${sign}']
+name: sign
+select value from cases_testextract where name='sign'
+('abc123',)
+new: abc123
+replace_list: ['${tom}']
+name: tom
+select value from cases_testextract where name='tom'
+('tom',)
+new: tom
+replace_list: []
+select name, extract from cases_testextract where case_id='30'
+[('number', 'json.number')]
+extracts:  ('number', 'json.number')
+resp_json:  {'args': {}, 'data': '{"tom": "tom", "number": "10000"}', 'files': {}, 'form': {}, 'headers': {'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate', 'Content-Length': '33', 'Content-Type': 'application/json', 'Host': 'httpbin.org', 'Sign': 'abc123', 'User-Agent': 'python-requests/2.26.0', 'X-Amzn-Trace-Id': 'Root=1-62e54e90-0968368a6b1cb6ee19e59719'}, 'json': {'number': '10000', 'tom': 'tom'}, 'origin': '183.23.73.4', 'url': 'http://httpbin.org/post'}
+update cases_testextract set value='10000' where case_id='30' and name='number'
+]]></system-out>
 		</testcase>
 	</testsuite>
 </testsuites>

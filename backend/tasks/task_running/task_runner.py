@@ -32,6 +32,7 @@ def task_runner(task_id):
             params_body = case.params_body.replace("\'", "\"")
             params_body_dict = json.loads(params_body)
             test_cases[case.name] = {
+                "case_id": case.id,
                 "url": case.url,
                 "method": case.method,
                 "header": header_dict,

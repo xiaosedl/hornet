@@ -12,7 +12,20 @@ from django.test import TestCase
 #     print(r.json())
 
 
-dict01 = {"name": "denlee", "age": 18}
-d = dict01.pop("name")
-print(d)
-print(dict01)
+# dict01 = {"name": "denlee", "age": 18}
+# d = dict01.pop("name")
+# print(d)
+# print(dict01)
+
+import re
+
+s = '{"name": ${name}/abc, "age": ${age}, "sex": "M"}'
+pattern = re.compile(r'\${' + r'\w+' + r'}', re.M | re.S)
+ss = re.findall(pattern, str(s))
+print("ss:", ss)
+for v in ss:
+    name = v.split('{')[1][:-1]
+    print(v)
+    print(name)
+new_s = re.sub(pattern, "baidu", str(s))
+print("new:", new_s)

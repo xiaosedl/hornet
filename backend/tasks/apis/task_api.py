@@ -92,14 +92,14 @@ def task_update(request, task_id: int, data: TaskIn):
 
     get_object_or_404(Project, pk=data.project)
     task = get_object_or_404(TestTask, pk=task_id)
-    relvance = get_object_or_404(TaskCaseRelevance, task_id=task_id)
+    relevance = get_object_or_404(TaskCaseRelevance, task_id=task_id)
 
     task.name = data.name
     task.describe = data.describe
     task.save()
 
-    relvance.case = json.dumps(data.cases)
-    relvance.save()
+    relevance.case = json.dumps(data.cases)
+    relevance.save()
 
     task_dict = model_to_dict(task)
     task_dict["cases"] = data.cases
@@ -119,7 +119,3 @@ def task_delete(request, task_id: int):
     task.save()
 
     return response()
-
-
-
-
