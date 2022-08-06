@@ -42,3 +42,9 @@ class ProjectIn(Schema):
     """任务所属项目入参"""
 
     project_id: int
+
+
+class TaskCaseListIn(Schema):
+    """更改用例顺序入参"""
+
+    case_list: list

@@ -23,7 +23,7 @@ def report_list(request, filters: ProjectIn = Query(...), **kwargs):
 
     tasks = TestTask.objects.filter(project_id=filters.project_id, is_delete=False).all()
     task_ids = [task.id for task in tasks]
-    return TestResult.objects.filter(task_id__in=task_ids).all()
+    return TestResult.objects.filter(task_id__in=task_ids).all().order_by('-id')
 
 
 @router.get("/{report_id}/", auth=None)
