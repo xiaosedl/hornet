@@ -19,7 +19,7 @@
 }
 
 body {
-  margin: 1px 1px 1px;
+  margin: 0;
 }
 
 #nav {

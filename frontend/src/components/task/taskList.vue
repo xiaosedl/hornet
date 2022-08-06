@@ -60,6 +60,9 @@
             <el-button type="text" size="small" @click="runTask(scope.row)"
               >执行</el-button
             >
+            <el-button type="text" size="small" @click="showCase(scope.row)"
+              >用例顺序</el-button
+            >
             <el-button type="text" size="small" @click="clickEdit(scope.row)"
               >编辑</el-button
             >
@@ -88,18 +91,27 @@
       :title="dialogTitle"
       @cancel="closeDialog"
     ></taskDialog>
+    <caseDialog
+      v-if="caseFlag"
+      :pid="projectForm.id"
+      :tid="taskId"
+      :title="dialogTitle"
+      @cancel="closeDialog"
+    ></caseDialog>
   </div>
 </template>
 
 <script>
 import ProjectApi from "../../request/project";
 import taskDialog from "../../components/task/taskDialog.vue";
+import caseDialog from "../../components/task/taskCase.vue";
 import TaskApi from "../../request/task";
 
 export default {
   name: "Task",
   components: {
     taskDialog,
+    caseDialog,
   },
   data() {
     return {
@@ -108,6 +120,7 @@ export default {
       },
       projectOptions: [],
       dialogFlag: false,
+      caseFlag: false,
       dialogTitle: "create",
       currentProjectId: "",
       taskId: "",
@@ -198,6 +211,7 @@ export default {
     // 关闭弹窗
     closeDialog() {
       this.dialogFlag = false;
+      this.caseFlag = false;
       this.initTaskList();
     },
 
@@ -207,7 +221,7 @@ export default {
       this.initTaskList();
     },
 
-    // 弹出项目编辑弹出
+    // 弹出项目编辑弹窗
     showEdit(id) {
       this.currentProjectId = id;
       this.dialogTitle = "edit";
@@ -233,6 +247,13 @@ export default {
       } else {
         this.$message.error(resp.error.msg);
       }
+    },
+
+    // 用例顺序
+    async showCase(row) {
+      console.log("用例顺序", row);
+      this.taskId = row.id;
+      this.caseFlag = true;
     },
   },
 };

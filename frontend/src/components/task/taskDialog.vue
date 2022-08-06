@@ -50,7 +50,9 @@
                 ></el-table-column>
               </el-table>
             </div>
-            <div style="width: 100%; float: right; text-align: right; margin: 10px">
+            <div
+              style="width: 100%; float: right; text-align: right; margin: 10px"
+            >
               <el-pagination
                 @current-change="handleCurrentChange"
                 background
