@@ -20,6 +20,7 @@ class ProjectIn(Schema):
 
 class Method(str, Enum):
     """请求方式：GET/POST/DELETE/PUT"""
+
     GET = "GET"
     POST = "POST"
     DELETE = "DELETE"
@@ -84,6 +85,7 @@ class ModuleSchema(Schema):
 
 class CaseOut(Schema):
     """用例出参"""
+
     id: int
     module_id: int
     url: str
@@ -101,3 +103,16 @@ class ExtractIn(Schema):
     extract_list: list
     module_id: int
     case_id: int
+
+
+class ExtractOut(Schema):
+    """变量出参"""
+
+    id: int
+    name: str
+    value: str
+    extract: str
+    case_id: int
+    create_time: Any
+    update_time: Any
+

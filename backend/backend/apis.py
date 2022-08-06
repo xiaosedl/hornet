@@ -15,6 +15,7 @@ from cases.apis.module_api import router as modules_router
 from cases.apis.case_api import router as cases_router
 from tasks.apis.task_api import router as tasks_router
 from tasks.apis.report_api import router as report_router
+from cases.apis.extract_api import router as extract_router
 
 
 class InvalidToken(Exception):
@@ -76,3 +77,5 @@ apis.add_router('/cases/', cases_router, tags=['Cases'])
 apis.add_router('/tasks/', tasks_router, tags=['Tasks'])
 # tags tasks URI: api/reports/xxx
 apis.add_router('/reports/', report_router, tags=['Report'])
+# tags tasks URI: api/reports/xxx
+apis.add_router('/extracts/', extract_router, tags=['Extract'])
