@@ -1,9 +1,6 @@
 <template>
   <div class="navigation">
-    <el-container
-      class="el-container"
-      style="height: 100%; border: 1px solid #eeeeee"
-    >
+    <el-container class="el-container">
       <el-aside width="200px" style="background-color: #1a2847">
         <div style="margin: 20px 0">
           <img class="logo" src="../assets/logo.svg" alt="logo" />
@@ -36,6 +33,12 @@
             <el-menu-item index="4" class="menu-option">
               <i class="el-icon-s-data"></i>
               <template #title>报告管理</template>
+            </el-menu-item>
+          </router-link>
+          <router-link to="/main/extract">
+            <el-menu-item index="5" class="menu-option">
+              <i class="el-icon-magic-stick"></i>
+              <template #title>变量管理</template>
             </el-menu-item>
           </router-link>
         </el-menu>
@@ -75,7 +78,7 @@
 
 .el-container {
   height: 100%;
-  border: 1px solid #eee;
+  /*border: 1px solid #eee;*/
 }
 
 .el-main {
@@ -104,6 +107,8 @@ export default {
         return "3";
       } else if (this.$route.path === "/main/report") {
         return "4";
+      } else if (this.$route.path === "/main/extract") {
+        return "5";
       }
       return "1";
     },

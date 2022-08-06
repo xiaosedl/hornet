@@ -20,7 +20,7 @@
     </div>
     <div>
       <el-table
-        :data="reportData"
+        :data="extractData"
         border
         header-align="center"
         style="width: 100%"
@@ -29,70 +29,32 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="报告名称"
+          label="变量名称"
           style="width: 25%"
-          header-align="center"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="tests"
-          label="总数"
-          style="width: 5%"
           align="center"
         >
-          <template slot-scope="scope">
-            <el-tag>{{ scope.row.tests }}</el-tag>
-          </template>
         </el-table-column>
         <el-table-column
-          prop="passed"
-          label="通过"
-          style="width: 5%"
+          prop="value"
+          label="变量值"
+          style="width: 10%"
           align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag type="success">{{ scope.row.passed }}</el-tag>
-          </template>
-        </el-table-column>
+        ></el-table-column>
         <el-table-column
-          prop="error"
-          label="错误"
-          style="width: 5%"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag type="danger">{{ scope.row.error }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="failure"
-          label="失败"
-          style="width: 5%"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag type="warning">{{ scope.row.failure }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="skipped"
-          label="跳过"
-          style="width: 5%"
-          align="center"
-        >
-          <template slot-scope="scope">
-            <el-tag type="info">{{ scope.row.skipped }}</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column
-          prop="runtime"
-          label="运行时长"
+          prop="extract"
+          label="提取规则"
           style="width: 10%"
           align="center"
         ></el-table-column>
         <el-table-column
           prop="create_time"
           label="创建时间"
+          style="width: 25%"
+          align="center"
+        ></el-table-column>
+        <el-table-column
+          prop="update_time"
+          label="更新时间"
           style="width: 25%"
           align="center"
         ></el-table-column>
@@ -104,10 +66,10 @@
           align="center"
         >
           <template slot-scope="scope">
-            <el-button type="text" size="small" @click="showReport(scope.row)"
+            <el-button type="text" size="small" @click="showExtract(scope.row)"
               >查看</el-button
             >
-            <el-button type="text" size="small" @click="deleteReport(scope.row)"
+            <el-button type="text" size="small" @click="deleteExtract(scope.row)"
               >删除</el-button
             >
           </template>
@@ -125,23 +87,23 @@
       </el-pagination>
     </div>
     <!--组件中，引入子组件-->
-    <reportDialog
+    <extractDialog
       v-if="dialogFlag"
-      :rid="reportId"
+      :rid="extractId"
       @cancel="closeDialog"
-    ></reportDialog>
+    ></extractDialog>
   </div>
 </template>
 
 <script>
 import ProjectApi from "../../request/project";
-import reportDialog from "../../components/report/reportDialog";
-import ReportApi from "../../request/report";
+import extractDialog from "../../components/extract/extractDialog";
+import ExtractApi from "../../request/extract";
 
 export default {
-  name: "Report",
+  name: "Extract",
   components: {
-    reportDialog,
+    extractDialog,
   },
   data() {
     return {
@@ -150,13 +112,13 @@ export default {
       },
       projectOptions: [],
       dialogFlag: false,
-      reportId: "",
+      extractId: "",
       req: {
         page: 1,
         size: 6,
       },
       total: 50,
-      reportData: [],
+      extractData: [],
     };
   },
 
@@ -166,7 +128,7 @@ export default {
   },
 
   mounted() {
-    this.initReportList();
+    this.initExtractList();
   },
 
   methods: {
@@ -191,41 +153,41 @@ export default {
     // 修改选中的项目
     changeProject(value) {
       this.projectForm.id = value;
-      this.initReportList();
+      this.initExtractList();
     },
 
-    // 初始化测试报告列表
-    async initReportList() {
+    // 初始化提取器管理列表
+    async initExtractList() {
       const req = {
         project_id: this.projectForm.id,
         page: this.req.page,
         size: this.req.size,
       };
-      const resp = await ReportApi.getReports(req);
+      const resp = await ExtractApi.getExtracts(req);
       if (resp.success === true) {
-        this.reportData = resp.items;
+        this.extractData = resp.items;
         this.total = resp.total;
       } else {
         this.$message.error(resp.error.mag);
       }
     },
 
-    // 展示报告详情弹窗
-    showReport(row) {
-      this.reportId = row.id;
+    // 展示提取器详情弹窗
+    showExtract(row) {
+      this.extractId = row.id;
       this.dialogFlag = true;
     },
 
     // 关闭弹窗
     closeDialog() {
       this.dialogFlag = false;
-      this.initReportList();
+      this.initExtractList();
     },
 
     // 分页方法，跳转到第几页
     handleCurrentChange(val) {
       this.req.page = val;
-      this.initReportList();
+      this.initExtractList();
     },
   },
 };
